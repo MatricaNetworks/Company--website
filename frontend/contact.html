@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Matrica Networks</title>
+    <meta name="description" content="Get in touch with Matrica Networks for cybersecurity solutions and consultations">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/neon.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.png">
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-rain" class="matrix-background"></canvas>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">
+                <img src="assets/images/logo.svg" alt="Matrica Networks" width="40" height="40">
+                <span class="neon-text">Matrica Networks</span>
+            </a>
+
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="products.html" class="nav__link">Products</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="services.html" class="nav__link">Services</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="blog.html" class="nav__link">Blog</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="careers.html" class="nav__link">Careers</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="contact.html" class="nav__link nav__link--active">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="nav__close" id="nav-close">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="nav__actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21 12.79a9 9 0 1 1-6.21-6.21 7 7 0 0 0 6.21 6.21z"></path>
+                    </svg>
+                </button>
+                
+                <a href="portal/login.html" class="button button--secondary button--small">Portal</a>
+                <div class="nav__toggle" id="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero hero--small">
+            <div class="container">
+                <div class="hero__content">
+                    <h1 class="hero__title" data-animation="glow">
+                        Get in <span class="neon-text">Touch</span>
+                    </h1>
+                    <p class="hero__description">
+                        Ready to secure your digital infrastructure? Contact our cybersecurity experts for a consultation.
+                    </p>
+                </div>
+            </div>
+            <div class="hero__scanner"></div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section">
+            <div class="container">
+                <div class="contact-grid">
+                    <!-- Contact Form -->
+                    <div class="contact-form-section" data-animation="slide-right">
+                        <div class="card">
+                            <div class="card__header">
+                                <h2 class="card__title">Send us a message</h2>
+                                <p class="card__description">
+                                    Fill out the form below and we'll get back to you within 24 hours.
+                                </p>
+                            </div>
+
+                            <form id="contact-form" class="form" novalidate>
+                                <div class="form__grid">
+                                    <div class="form__group">
+                                        <label for="name" class="form__label">
+                                            Name / Organisation *
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="name" 
+                                            name="name" 
+                                            class="form__input" 
+                                            placeholder="Enter your name or organization"
+                                            required 
+                                            minlength="2"
+                                            maxlength="100"
+                                        >
+                                        <span class="form__error" id="name-error"></span>
+                                    </div>
+
+                                    <div class="form__group">
+                                        <label for="email" class="form__label">
+                                            Email ID *
+                                        </label>
+                                        <input 
+                                            type="email" 
+                                            id="email" 
+                                            name="email" 
+                                            class="form__input" 
+                                            placeholder="your@email.com"
+                                            required
+                                        >
+                                        <span class="form__error" id="email-error"></span>
+                                    </div>
+
+                                    <div class="form__group">
+                                        <label for="phone" class="form__label">
+                                            Phone Number
+                                        </label>
+                                        <input 
+                                            type="tel" 
+                                            id="phone" 
+                                            name="phone" 
+                                            class="form__input" 
+                                            placeholder="+1 (555) 123-4567"
+                                            pattern="[+]?[0-9\s\-\(\)]{10,15}"
+                                        >
+                                        <span class="form__error" id="phone-error"></span>
+                                    </div>
+
+                                    <div class="form__group">
+                                        <label for="subject" class="form__label">
+                                            Subject *
+                                        </label>
+                                        <select id="subject" name="subject" class="form__select" required>
+                                            <option value="">Select a topic...</option>
+                                            <option value="general">General Inquiry</option>
+                                            <option value="products">Product Information</option>
+                                            <option value="services">Cybersecurity Services</option>
+                                            <option value="pentesting">Penetration Testing</option>
+                                            <option value="soc">SOC Services</option>
+                                            <option value="compliance">Compliance & Audit</option>
+                                            <option value="incident">Security Incident</option>
+                                            <option value="partnership">Partnership</option>
+                                            <option value="careers">Careers</option>
+                                            <option value="support">Technical Support</option>
+                                        </select>
+                                        <span class="form__error" id="subject-error"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form__group">
+                                    <label for="message" class="form__label">
+                                        Message *
+                                    </label>
+                                    <textarea 
+                                        id="message" 
+                                        name="message" 
+                                        class="form__textarea" 
+                                        placeholder="Tell us about your cybersecurity needs, current challenges, or how we can help..."
+                                        rows="6"
+                                        required
+                                        minlength="10"
+                                        maxlength="2000"
+                                    ></textarea>
+                                    <span class="form__error" id="message-error"></span>
+                                    <div class="form__character-count">
+                                        <span id="message-count">0</span>/2000 characters
+                                    </div>
+                                </div>
+
+                                <div class="form__group">
+                                    <label class="form__checkbox">
+                                        <input type="checkbox" id="privacy" name="privacy" required>
+                                        <span class="form__checkmark"></span>
+                                        <span class="form__checkbox-text">
+                                            I agree to the <a href="#" class="link">Privacy Policy</a> and consent to processing of my personal data *
+                                        </span>
+                                    </label>
+                                    <span class="form__error" id="privacy-error"></span>
+                                </div>
+
+                                <div class="form__group">
+                                    <label class="form__checkbox">
+                                        <input type="checkbox" id="newsletter" name="newsletter">
+                                        <span class="form__checkmark"></span>
+                                        <span class="form__checkbox-text">
+                                            Subscribe to our cybersecurity newsletter
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="form__actions">
+                                    <button type="submit" class="button button--primary button--large" id="submit-btn">
+                                        <span class="button__text">Send Message</span>
+                                        <span class="button__loading" style="display: none;">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                                                <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2">
+                                                    <animateTransform attributeName="transform" type="rotate" dur="1s" repeatCount="indefinite" values="0 12 12;360 12 12"/>
+                                                </path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="button button--ghost" id="clear-btn">
+                                        Clear Form
+                                    </button>
+                                </div>
+
+                                <!-- Success/Error Messages -->
+                                <div class="form__message" id="form-message" style="display: none;"></div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="contact-info-section" data-animation="slide-left">
+                        <div class="contact-info">
+                            <h3 class="contact-info__title">Contact Information</h3>
+                            <p class="contact-info__description">
+                                Get in touch with our cybersecurity experts. We're here to help secure your digital future.
+                            </p>
+
+                            <div class="contact-methods">
+                                <div class="contact-method">
+                                    <div class="contact-method__icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                            <polyline points="22,6 12,13 2,6"/>
+                                        </svg>
+                                    </div>
+                                    <div class="contact-method__content">
+                                        <h4>Email</h4>
+                                        <p>
+                                            <a href="/cdn-cgi/l/email-protection#e78e898188a78a8693958e84868982939088958c94c984888a" class="link"><span class="__cf_email__" data-cfemail="6d04030b022d000c191f040e0c0308191a021f061e430e0200">[email&#160;protected]</span></a><br>
+                                            <a href="/cdn-cgi/l/email-protection#3744525442455e434e775a5643455e54565952434058455c441954585a" class="link"><span class="__cf_email__" data-cfemail="2e5d4b4d5b5c475a576e434f5a5c474d4f404b5a59415c455d004d4143">[email&#160;protected]</span></a><br>
+                                            <a href="/cdn-cgi/l/email-protection#582b2d2828372a2c1835392c2a313b39363d2c2f372a332b763b3735" class="link"><span class="__cf_email__" data-cfemail="9cefe9ececf3eee8dcf1fde8eef5fffdf2f9e8ebf3eef7efb2fff3f1">[email&#160;protected]</span></a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="contact-method">
+                                    <div class="contact-method__icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="contact-method__content">
+                                        <h4>Phone</h4>
+                                        <p>
+                                            <strong>Main Office:</strong> <a href="tel:+918001234567" class="link">+91 800 123 4567</a><br>
+                                            <strong>Emergency Hotline:</strong> <a href="tel:+919999888777" class="link">+91 999 988 8777</a><br>
+                                            <strong>Support:</strong> <a href="tel:+918887776666" class="link">+91 888 777 6666</a><br>
+                                            <span class="contact-method__note">24/7 Security Operations Center</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="contact-method">
+                                    <div class="contact-method__icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                            <circle cx="12" cy="10" r="3"/>
+                                        </svg>
+                                    </div>
+                                    <div class="contact-method__content">
+                                        <h4>Registered Office</h4>
+                                        <p>
+                                            Matrica Networks Pvt Ltd<br>
+                                            Cyber Security Tower<br>
+                                            Electronic City, Phase 2<br>
+                                            Bangalore, Karnataka 560100<br>
+                                            India
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="contact-method">
+                                    <div class="contact-method__icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                            <polyline points="9,22 9,12 15,12 15,22"/>
+                                        </svg>
+                                    </div>
+                                    <div class="contact-method__content">
+                                        <h4>Branch Office</h4>
+                                        <p>
+                                            Matrica Networks<br>
+                                            Tech Hub Complex<br>
+                                            Hyderabad, Telangana 500081<br>
+                                            India
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="business-hours">
+                                <h4>Business Hours</h4>
+                                <div class="hours-grid">
+                                    <div class="hours-item">
+                                        <span class="hours-day">Monday - Friday</span>
+                                        <span class="hours-time">9:00 AM - 6:00 PM IST</span>
+                                    </div>
+                                    <div class="hours-item">
+                                        <span class="hours-day">Saturday</span>
+                                        <span class="hours-time">10:00 AM - 4:00 PM IST</span>
+                                    </div>
+                                    <div class="hours-item">
+                                        <span class="hours-day">Sunday</span>
+                                        <span class="hours-time">Emergency Only</span>
+                                    </div>
+                                </div>
+                                <div class="emergency-info">
+                                    <h5>🛡️ 24/7 Security Operations Center (SOC)</h5>
+                                    <p>Our SOC team monitors threats around the clock. For security incidents, call our emergency hotline immediately.</p>
+                                    <div class="response-times">
+                                        <div class="response-item">
+                                            <span class="severity critical">Critical Incidents</span>
+                                            <span class="time">15 minutes</span>
+                                        </div>
+                                        <div class="response-item">
+                                            <span class="severity high">High Priority</span>
+                                            <span class="time">1 hour</span>
+                                        </div>
+                                        <div class="response-item">
+                                            <span class="severity normal">General Inquiries</span>
+                                            <span class="time">24 hours</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="certifications-info">
+                                <h4>Certifications & Compliance</h4>
+                                <div class="cert-badges">
+                                    <div class="cert-badge">
+                                        <span class="cert-name">ISO 27001</span>
+                                        <span class="cert-desc">Information Security Management</span>
+                                    </div>
+                                    <div class="cert-badge">
+                                        <span class="cert-name">SOC 2 Type II</span>
+                                        <span class="cert-desc">Security & Availability</span>
+                                    </div>
+                                    <div class="cert-badge">
+                                        <span class="cert-name">GDPR</span>
+                                        <span class="cert-desc">Data Protection Compliant</span>
+                                    </div>
+                                    <div class="cert-badge">
+                                        <span class="cert-name">PCI DSS</span>
+                                        <span class="cert-desc">Payment Card Industry</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="social-contact">
+                                <h4>Connect With Us</h4>
+                                <div class="social-links">
+                                    <a href="https://twitter.com/matrica_networks" class="social-link" aria-label="Twitter">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="https://linkedin.com/company/matrica-networks" class="social-link" aria-label="LinkedIn">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                                            <circle cx="4" cy="4" r="2"/>
+                                        </svg>
+                                    </a>
+                                    <a href="https://github.com/matrica-networks" class="social-link" aria-label="GitHub">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="https://youtube.com/@MatricaNetworks" class="social-link" aria-label="YouTube">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <p class="social-note">Follow us for the latest cybersecurity insights and company updates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section section--dark">
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title">Frequently Asked Questions</h2>
+                    <p class="section__description">
+                        Quick answers to common questions about our services
+                    </p>
+                </div>
+
+                <div class="faq-grid">
+                    <div class="faq-item" data-animation="fade-up">
+                        <h3 class="faq-question">How quickly can you respond to a security incident?</h3>
+                        <p class="faq-answer">
+                            Our SOC operates 24/7 with incident response times of under 15 minutes for critical threats. Emergency response teams can be deployed within 2-4 hours depending on location.
+                        </p>
+                    </div>
+
+                    <div class="faq-item" data-animation="fade-up">
+                        <h3 class="faq-question">What compliance frameworks do you support?</h3>
+                        <p class="faq-answer">
+                            We provide compliance solutions for ISO 27001, SOC 2, NIST CSF, PCI DSS, HIPAA, GDPR, CIS Controls, and FedRAMP. Our experts help with gap assessments, implementation, and ongoing compliance management.
+                        </p>
+                    </div>
+
+                    <div class="faq-item" data-animation="fade-up">
+                        <h3 class="faq-question">Do you offer penetration testing services?</h3>
+                        <p class="faq-answer">
+                            Yes, we provide comprehensive penetration testing including network, web application, mobile app, cloud infrastructure, and social engineering assessments. Reports include executive summaries and detailed remediation guidance.
+                        </p>
+                    </div>
+
+                    <div class="faq-item" data-animation="fade-up">
+                        <h3 class="faq-question">Can you help with cloud security?</h3>
+                        <p class="faq-answer">
+                            Absolutely. Our cloud security services cover AWS, Azure, and GCP environments. We provide security architecture reviews, configuration assessments, CSPM implementation, and ongoing monitoring.
+                        </p>
+                    </div>
+
+                    <div class="faq-item" data-animation="fade-up">
+                        <h3 class="faq-question">What makes Matrica Networks different?</h3>
+                        <p class="faq-answer">
+                            Our combination of proprietary tools (Shell IDE, Psychy OS, Sygnil), expert team, and focus on advanced threats sets us apart. We provide custom solutions tailored to each client's unique security landscape.
+                        </p>
+                    </div>
+
+                    <div class="faq-item" data-animation="fade-up">
+                        <h3 class="faq-question">Do you provide training services?</h3>
+                        <p class="faq-answer">
+                            Yes, we offer cybersecurity awareness training, technical training for IT teams, and specialized courses on threat hunting, incident response, and security architecture.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <div class="footer__logo">
+                        <img src="assets/images/logo.svg" alt="Matrica Networks" width="32" height="32">
+                        <span class="neon-text">Matrica Networks</span>
+                    </div>
+                    <p class="footer__description">
+                        Advanced cybersecurity solutions for the digital age. Protecting organizations from evolving cyber threats.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Products</h4>
+                    <ul class="footer__links">
+                        <li><a href="products.html#shell-ide" class="footer__link">Shell IDE</a></li>
+                        <li><a href="products.html#psychy-os" class="footer__link">Psychy OS</a></li>
+                        <li><a href="products.html#sygnil" class="footer__link">Sygnil</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Services</h4>
+                    <ul class="footer__links">
+                        <li><a href="services.html#pentesting" class="footer__link">Penetration Testing</a></li>
+                        <li><a href="services.html#soc" class="footer__link">SOC Services</a></li>
+                        <li><a href="services.html#threat-hunting" class="footer__link">Threat Hunting</a></li>
+                        <li><a href="services.html#dfir" class="footer__link">DFIR</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Company</h4>
+                    <ul class="footer__links">
+                        <li><a href="index.html#about" class="footer__link">About Us</a></li>
+                        <li><a href="contact.html" class="footer__link">Contact</a></li>
+                        <li><a href="careers.html" class="footer__link">Careers</a></li>
+                        <li><a href="blog.html" class="footer__link">Blog</a></li>
+                        <li><a href="portal/login.html" class="footer__link">Employee Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    © 2025 Matrica Networks Pvt Ltd. All rights reserved.
+                </p>
+                <div class="footer__legal">
+                    <a href="#privacy-policy" class="footer__link">Privacy Policy</a>
+                    <a href="#terms-of-service" class="footer__link">Terms of Service</a>
+                    <a href="#security-policy" class="footer__link">Security Policy</a>
+                    <a href="#compliance" class="footer__link">Compliance</a>
+                    <a href="contact.html" class="footer__link">Emergency Hotline: +91 999 988 8777</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/theme.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        // Contact form functionality
+        class ContactManager {
+            constructor() {
+                this.form = document.getElementById('contact-form');
+                this.csrfToken = '';
+                this.init();
+            }
+
+            async init() {
+                this.bindEvents();
+                this.initValidation();
+                await this.getCSRFToken();
+                this.initMatrixRain();
+            }
+
+            async getCSRFToken() {
+                try {
+                    const response = await fetch('/api/csrf-token');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.csrfToken = data.token;
+                    }
+                } catch (error) {
+                    console.error('Failed to get CSRF token:', error);
+                }
+            }
+
+            bindEvents() {
+                // Form submission
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSubmit();
+                });
+
+                // Clear form
+                document.getElementById('clear-btn').addEventListener('click', () => {
+                    this.clearForm();
+                });
+
+                // Real-time validation
+                this.form.querySelectorAll('input, textarea, select').forEach(field => {
+                    field.addEventListener('blur', () => {
+                        this.validateField(field);
+                    });
+
+                    field.addEventListener('input', () => {
+                        this.clearFieldError(field);
+                    });
+                });
+
+                // Character counter for message
+                const messageField = document.getElementById('message');
+                const messageCounter = document.getElementById('message-count');
+                
+                messageField.addEventListener('input', () => {
+                    const count = messageField.value.length;
+                    messageCounter.textContent = count;
+                    
+                    if (count > 1800) {
+                        messageCounter.style.color = 'var(--color-warning)';
+                    } else if (count > 1900) {
+                        messageCounter.style.color = 'var(--color-danger)';
+                    } else {
+                        messageCounter.style.color = 'var(--color-text-secondary)';
+                    }
+                });
+
+                // Phone number formatting
+                const phoneField = document.getElementById('phone');
+                phoneField.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 0) {
+                        if (value.startsWith('91') && value.length <= 12) {
+                            value = '+91 ' + value.substring(2).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+                        } else if (value.length <= 10) {
+                            value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+                        }
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            initValidation() {
+                // Custom validation messages
+                const fields = {
+                    name: 'Please enter your name or organization name',
+                    email: 'Please enter a valid email address',
+                    phone: 'Please enter a valid phone number',
+                    subject: 'Please select a subject',
+                    message: 'Please enter a message (minimum 10 characters)',
+                    privacy: 'You must agree to the privacy policy'
+                };
+
+                Object.keys(fields).forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    if (field) {
+                        field.setCustomValidity('');
+                    }
+                });
+            }
+
+            validateField(field) {
+                const value = field.value.trim();
+                const fieldName = field.name;
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                
+                let isValid = true;
+                let errorMessage = '';
+
+                switch (fieldName) {
+                    case 'name':
+                        if (value.length < 2) {
+                            isValid = false;
+                            errorMessage = 'Name must be at least 2 characters long';
+                        } else if (value.length > 100) {
+                            isValid = false;
+                            errorMessage = 'Name must be less than 100 characters';
+                        }
+                        break;
+
+                    case 'email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(value)) {
+                            isValid = false;
+                            errorMessage = 'Please enter a valid email address';
+                        }
+                        break;
+
+                    case 'phone':
+                        if (value && !/^[+]?[0-9\s\-\(\)]{10,15}$/.test(value)) {
+                            isValid = false;
+                            errorMessage = 'Please enter a valid phone number';
+                        }
+                        break;
+
+                    case 'subject':
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = 'Please select a subject';
+                        }
+                        break;
+
+                    case 'message':
+                        if (value.length < 10) {
+                            isValid = false;
+                            errorMessage = 'Message must be at least 10 characters long';
+                        } else if (value.length > 2000) {
+                            isValid = false;
+                            errorMessage = 'Message must be less than 2000 characters';
+                        }
+                        break;
+
+                    case 'privacy':
+                        if (!field.checked) {
+                            isValid = false;
+                            errorMessage = 'You must agree to the privacy policy';
+                        }
+                        break;
+                }
+
+                if (errorElement) {
+                    if (isValid) {
+                        errorElement.textContent = '';
+                        field.classList.remove('form__input--error');
+                    } else {
+                        errorElement.textContent = errorMessage;
+                        field.classList.add('form__input--error');
+                    }
+                }
+
+                return isValid;
+            }
+
+            validateForm() {
+                const requiredFields = ['name', 'email', 'subject', 'message', 'privacy'];
+                let isFormValid = true;
+
+                requiredFields.forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    if (field && !this.validateField(field)) {
+                        isFormValid = false;
+                    }
+                });
+
+                return isFormValid;
+            }
+
+            clearFieldError(field) {
+                const errorElement = document.getElementById(`${field.name}-error`);
+                if (errorElement && errorElement.textContent) {
+                    errorElement.textContent = '';
+                    field.classList.remove('form__input--error');
+                }
+            }
+
+            async handleSubmit() {
+                // Validate form
+                if (!this.validateForm()) {
+                    this.showMessage('Please fix the errors above and try again.', 'error');
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submit-btn');
+                const buttonText = submitBtn.querySelector('.button__text');
+                const buttonLoading = submitBtn.querySelector('.button__loading');
+
+                // Show loading state
+                submitBtn.disabled = true;
+                buttonText.style.display = 'none';
+                buttonLoading.style.display = 'inline-flex';
+
+                try {
+                    // Collect form data
+                    const formData = new FormData(this.form);
+                    const data = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone') || null,
+                        subject: formData.get('subject'),
+                        message: formData.get('message'),
+                        newsletter: formData.get('newsletter') === 'on',
+                        csrf_token: this.csrfToken
+                    };
+
+                    // Send to API
+                    const response = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        this.showMessage(
+                            'Thank you for your message! We\'ll get back to you within 24 hours.', 
+                            'success'
+                        );
+                        this.clearForm();
+                        
+                        // Track conversion (analytics)
+                        this.trackConversion(data);
+                        
+                    } else {
+                        throw new Error(result.error || 'Failed to send message');
+                    }
+
+                } catch (error) {
+                    console.error('Contact form error:', error);
+                    this.showMessage(
+                        'Sorry, there was an error sending your message. Please try again or contact us directly.',
+                        'error'
+                    );
+                } finally {
+                    // Reset loading state
+                    submitBtn.disabled = false;
+                    buttonText.style.display = 'inline';
+                    buttonLoading.style.display = 'none';
+                }
+            }
+
+            showMessage(text, type = 'info') {
+                const messageElement = document.getElementById('form-message');
+                
+                messageElement.textContent = text;
+                messageElement.className = `form__message form__message--${type}`;
+                messageElement.style.display = 'block';
+
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 5000);
+
+                // Scroll to message
+                messageElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            clearForm() {
+                this.form.reset();
+                
+                // Clear all error messages
+                this.form.querySelectorAll('.form__error').forEach(error => {
+                    error.textContent = '';
+                });
+                
+                // Remove error classes
+                this.form.querySelectorAll('.form__input--error').forEach(field => {
+                    field.classList.remove('form__input--error');
+                });
+
+                // Reset character counter
+                document.getElementById('message-count').textContent = '0';
+            }
+
+            trackConversion(data) {
+                // Track form submission for analytics
+                try {
+                    console.log('Contact form submitted:', {
+                        subject: data.subject,
+                        newsletter: data.newsletter,
+                        timestamp: new Date().toISOString()
+                    });
+                } catch (error) {
+                    console.error('Analytics tracking error:', error);
+                }
+            }
+
+            initMatrixRain() {
+                // Initialize matrix rain effect
+                if (typeof MatrixRain !== 'undefined') {
+                    new MatrixRain('matrix-rain');
+                }
+            }
+        }
+
+        // Initialize contact manager when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ContactManager();
+        });
+    </script>
+</body>
+</html>

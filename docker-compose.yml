@@ -1,0 +1,198 @@
+# Matrica Networks - Docker Compose Configuration
+# 
+# This docker-compose file provides a complete deployment setup for the
+# Matrica Networks cybersecurity website with proper volume mounts,
+# networking, and production-ready configuration.
+
+version: '3.8'
+
+services:
+  # Main application service
+  matrica:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: matrica-app
+    restart: unless-stopped
+    
+    # Port mapping
+    ports:
+      - "8000:8000"
+    
+    # Environment variables
+    environment:
+      - MATRICA_ENV=production
+      - MATRICA_HOST=0.0.0.0
+      - MATRICA_PORT=8000
+      - PYTHONUNBUFFERED=1
+    
+    # Volume mounts for persistent data
+    volumes:
+      # Database persistence
+      - matrica_db:/app/backend
+      # Log persistence 
+      - matrica_logs:/app/backend/logs
+      # File storage persistence
+      - matrica_storage:/app/backend/storage
+      # Backup storage
+      - matrica_backups:/app/backups
+      # Optional: Bind mount for development
+      # - .:/app
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.5'
+    
+    # Network
+    networks:
+      - matrica-network
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Nginx reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    container_name: matrica-nginx
+    restart: unless-stopped
+    
+    # Only expose HTTP/HTTPS to the outside world
+    ports:
+      - "80:80"
+      - "443:443"
+    
+    # Nginx configuration
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - matrica_logs:/var/log/nginx
+    
+    # Depends on main app
+    depends_on:
+      matrica:
+        condition: service_healthy
+    
+    # Network
+    networks:
+      - matrica-network
+    
+    # Only start if nginx config exists
+    profiles:
+      - production
+
+  # Optional: Database backup service
+  backup:
+    image: alpine:latest
+    container_name: matrica-backup
+    restart: "no"
+    
+    # Environment for backup schedule
+    environment:
+      - BACKUP_RETENTION_DAYS=30
+    
+    # Volumes for backup access
+    volumes:
+      - matrica_db:/source/db:ro
+      - matrica_storage:/source/storage:ro
+      - matrica_backups:/backups
+    
+    # Backup script
+    command: >
+      sh -c '
+      echo "🔄 Starting backup process..."
+      TIMESTAMP=$$(date +%Y%m%d_%H%M%S)
+      
+      # Create backup directory
+      mkdir -p /backups/$$TIMESTAMP
+      
+      # Backup database
+      if [ -f /source/db/matrica.db ]; then
+        cp /source/db/matrica.db /backups/$$TIMESTAMP/matrica.db
+        echo "✓ Database backed up"
+      fi
+      
+      # Backup storage files
+      if [ -d /source/storage ]; then
+        tar -czf /backups/$$TIMESTAMP/storage.tar.gz -C /source storage/
+        echo "✓ Storage files backed up"
+      fi
+      
+      # Cleanup old backups
+      find /backups -maxdepth 1 -type d -mtime +$$BACKUP_RETENTION_DAYS -exec rm -rf {} \;
+      echo "✓ Old backups cleaned up"
+      
+      echo "✅ Backup completed: $$TIMESTAMP"
+      '
+    
+    # Network
+    networks:
+      - matrica-network
+    
+    # Only run backup manually or via cron
+    profiles:
+      - backup
+
+# Named volumes for data persistence
+volumes:
+  matrica_db:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/db
+      o: bind
+    name: matrica_database
+  
+  matrica_logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/logs
+      o: bind
+    name: matrica_logs
+  
+  matrica_storage:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/storage
+      o: bind
+    name: matrica_storage
+  
+  matrica_backups:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/backups
+      o: bind
+    name: matrica_backups
+
+# Custom network for service communication
+networks:
+  matrica-network:
+    driver: bridge
+    name: matrica-net
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

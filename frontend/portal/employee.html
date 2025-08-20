@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal - Matrica Networks</title>
+    <meta name="description" content="Employee portal for Matrica Networks staff">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/layout.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/neon.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.png">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+</head>
+<body class="employee-page">
+    <!-- Employee Header -->
+    <header class="employee-header">
+        <div class="employee-header__left">
+            <div class="employee-logo">
+                <img src="../assets/images/logo.svg" alt="Matrica Networks" width="32" height="32">
+                <span class="neon-text">Employee Portal</span>
+            </div>
+            <nav class="employee-nav" id="employee-nav">
+                <button class="employee-nav__item employee-nav__item--active" data-tab="dashboard">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="employee-nav__item" data-tab="id-card">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                    <span>ID Card</span>
+                </button>
+                <button class="employee-nav__item" data-tab="attendance">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    <span>Attendance</span>
+                </button>
+                <button class="employee-nav__item" data-tab="leave">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                    </svg>
+                    <span>Leave</span>
+                </button>
+                <button class="employee-nav__item" data-tab="tasks">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                        <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                        <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                        <path d="M12 21c0-1-1-3-3-3s-3 2-3 3 1 3 3 3 3-2 3-3"/>
+                        <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+                    </svg>
+                    <span>Tasks</span>
+                </button>
+                <button class="employee-nav__item" data-tab="documents">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                        <polyline points="13,2 13,9 20,9"/>
+                    </svg>
+                    <span>Documents</span>
+                </button>
+                <button class="employee-nav__item" data-tab="profile">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>Profile</span>
+                </button>
+            </nav>
+        </div>
+        <div class="employee-header__right">
+            <div class="employee-user">
+                <div class="employee-user__avatar">
+                    <span id="user-avatar">E</span>
+                </div>
+                <div class="employee-user__info">
+                    <span class="employee-user__name" id="user-name">Employee</span>
+                    <span class="employee-user__role">Team Member</span>
+                </div>
+                <div class="employee-user__menu">
+                    <button class="employee-user__menu-toggle" id="user-menu-toggle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"/>
+                        </svg>
+                    </button>
+                    <div class="employee-user__dropdown" id="user-dropdown">
+                        <a href="#" class="employee-user__dropdown-item">Settings</a>
+                        <a href="#" class="employee-user__dropdown-item">Help</a>
+                        <div class="employee-user__dropdown-divider"></div>
+                        <button class="employee-user__dropdown-item" id="logout-btn">Sign Out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Employee Content -->
+    <main class="employee-main">
+        <!-- Dashboard Tab -->
+        <section class="employee-tab employee-tab--active" id="dashboard-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">Welcome Back!</h1>
+                    <div class="employee-section__actions">
+                        <button class="button button--secondary button--small" id="refresh-dashboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23,4 23,10 17,10"/>
+                                <polyline points="1,20 1,14 7,14"/>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-grid">
+                    <div class="quick-action-card" data-action="clock-in">
+                        <div class="quick-action-icon quick-action-icon--success">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Clock In</h3>
+                            <p>Start your workday</p>
+                            <span class="quick-action-status" id="attendance-status">Ready to clock in</span>
+                        </div>
+                    </div>
+
+                    <div class="quick-action-card" data-action="apply-leave">
+                        <div class="quick-action-icon quick-action-icon--info">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Request Leave</h3>
+                            <p>Submit time off request</p>
+                            <span class="quick-action-status">Available: <span id="leave-balance">20 days</span></span>
+                        </div>
+                    </div>
+
+                    <div class="quick-action-card" data-action="view-tasks">
+                        <div class="quick-action-icon quick-action-icon--warning">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                                <path d="M12 21c0-1-1-3-3-3s-3 2-3 3 1 3 3 3 3-2 3-3"/>
+                                <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>View Tasks</h3>
+                            <p>Check your assignments</p>
+                            <span class="quick-action-status">Pending: <span id="pending-tasks">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="quick-action-card" data-action="digital-id">
+                        <div class="quick-action-icon quick-action-icon--primary">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-content">
+                            <h3>Digital ID</h3>
+                            <p>View employee card</p>
+                            <span class="quick-action-status">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div class="dashboard-content-grid">
+                    <div class="dashboard-widget">
+                        <div class="dashboard-widget__header">
+                            <h3>Recent Activity</h3>
+                            <button class="button button--ghost button--small">View All</button>
+                        </div>
+                        <div class="activity-timeline" id="recent-activity">
+                            <div class="activity-item">
+                                <div class="activity-icon activity-icon--success">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12,6 12,12 16,14"/>
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">Logged in to system</div>
+                                    <div class="activity-time">Just now</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-widget">
+                        <div class="dashboard-widget__header">
+                            <h3>Today's Schedule</h3>
+                        </div>
+                        <div class="schedule-list" id="todays-schedule">
+                            <div class="schedule-item">
+                                <div class="schedule-time">09:00 AM</div>
+                                <div class="schedule-event">
+                                    <div class="schedule-title">Team Meeting</div>
+                                    <div class="schedule-location">Conference Room A</div>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-time">02:00 PM</div>
+                                <div class="schedule-event">
+                                    <div class="schedule-title">Security Review</div>
+                                    <div class="schedule-location">Virtual</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-widget">
+                        <div class="dashboard-widget__header">
+                            <h3>Notifications</h3>
+                            <span class="notification-badge" id="notification-count">2</span>
+                        </div>
+                        <div class="notification-list" id="notifications">
+                            <div class="notification-item notification-item--info">
+                                <div class="notification-content">
+                                    <div class="notification-title">System Update</div>
+                                    <div class="notification-text">Scheduled maintenance tonight at 11 PM</div>
+                                    <div class="notification-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item notification-item--warning">
+                                <div class="notification-content">
+                                    <div class="notification-title">Leave Request</div>
+                                    <div class="notification-text">Your leave request is pending approval</div>
+                                    <div class="notification-time">1 day ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Digital ID Card Tab -->
+        <section class="employee-tab" id="id-card-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">Digital ID Card</h1>
+                    <div class="employee-section__actions">
+                        <button class="button button--secondary button--small" id="download-id">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7,10 12,15 17,10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <div class="id-card-container">
+                    <div class="digital-id-card">
+                        <div class="id-card-header">
+                            <div class="id-card-logo">
+                                <img src="../assets/images/logo.svg" alt="Matrica Networks" width="24" height="24">
+                                <span class="neon-text">Matrica Networks</span>
+                            </div>
+                            <div class="id-card-type">Employee ID</div>
+                        </div>
+
+                        <div class="id-card-content">
+                            <div class="id-card-photo">
+                                <div class="employee-photo" id="employee-photo">
+                                    <span id="photo-initials">UN</span>
+                                </div>
+                            </div>
+
+                            <div class="id-card-info">
+                                <div class="id-card-field">
+                                    <label>Full Name</label>
+                                    <div class="id-card-value" id="id-full-name">User Name</div>
+                                </div>
+                                <div class="id-card-field">
+                                    <label>Employee ID</label>
+                                    <div class="id-card-value" id="id-employee-id">EMP001</div>
+                                </div>
+                                <div class="id-card-field">
+                                    <label>Department</label>
+                                    <div class="id-card-value" id="id-department">Cybersecurity</div>
+                                </div>
+                                <div class="id-card-field">
+                                    <label>Position</label>
+                                    <div class="id-card-value" id="id-position">Security Analyst</div>
+                                </div>
+                                <div class="id-card-field">
+                                    <label>Email</label>
+                                    <div class="id-card-value" id="id-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3d484e584f7d505c494f545e5c5358494a524f564e135e5250">[email&#160;protected]</a></div>
+                                </div>
+                                <div class="id-card-field">
+                                    <label>Valid Until</label>
+                                    <div class="id-card-value" id="id-expiry">Dec 31, 2025</div>
+                                </div>
+                            </div>
+
+                            <div class="id-card-qr">
+                                <div class="qr-code" id="employee-qr">
+                                    <!-- QR Code will be generated here -->
+                                    <canvas id="qr-canvas" width="120" height="120"></canvas>
+                                </div>
+                                <div class="qr-label">Scan for verification</div>
+                            </div>
+                        </div>
+
+                        <div class="id-card-footer">
+                            <div class="security-features">
+                                <span class="security-feature">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                    Secured
+                                </span>
+                                <span class="security-feature">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 12l2 2 4-4"/>
+                                        <circle cx="12" cy="12" r="9"/>
+                                    </svg>
+                                    Verified
+                                </span>
+                            </div>
+                            <div class="issue-date">Issued: <span id="id-issue-date">Jan 1, 2025</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attendance Tab -->
+        <section class="employee-tab" id="attendance-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">Attendance Management</h1>
+                    <div class="employee-section__actions">
+                        <button class="button button--secondary button--small">Export Report</button>
+                    </div>
+                </div>
+
+                <!-- Attendance Clock -->
+                <div class="attendance-clock-section">
+                    <div class="attendance-clock">
+                        <div class="clock-display">
+                            <div class="current-time" id="current-time">10:30:45 AM</div>
+                            <div class="current-date" id="current-date">Monday, January 1, 2025</div>
+                        </div>
+                        
+                        <div class="attendance-status" id="attendance-status-display">
+                            <div class="status-indicator status-indicator--out">
+                                <span class="status-text">Currently Clocked Out</span>
+                                <span class="status-time">Last clocked in: 9:00 AM</span>
+                            </div>
+                        </div>
+
+                        <div class="attendance-actions">
+                            <button class="button button--primary button--large" id="clock-in-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                                Clock In
+                            </button>
+                            <button class="button button--secondary button--large" id="clock-out-btn" disabled>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M9 9l6 6"/>
+                                    <path d="M15 9l-6 6"/>
+                                </svg>
+                                Clock Out
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="attendance-summary">
+                        <div class="summary-card">
+                            <div class="summary-icon summary-icon--primary">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <div class="summary-value" id="today-hours">0h 0m</div>
+                                <div class="summary-label">Today's Hours</div>
+                            </div>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-icon summary-icon--success">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    <polyline points="9,22 9,12 15,12 15,22"/>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <div class="summary-value" id="week-hours">40h 0m</div>
+                                <div class="summary-label">This Week</div>
+                            </div>
+                        </div>
+
+                        <div class="summary-card">
+                            <div class="summary-icon summary-icon--info">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                            </div>
+                            <div class="summary-content">
+                                <div class="summary-value" id="month-hours">160h 0m</div>
+                                <div class="summary-label">This Month</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance History -->
+                <div class="attendance-history">
+                    <div class="history-header">
+                        <h3>Recent Attendance</h3>
+                        <div class="history-filters">
+                            <select class="filter-select" id="attendance-period">
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="attendance-table-container">
+                        <table class="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Total Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-history-body">
+                                <!-- Attendance history loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leave Management Tab -->
+        <section class="employee-tab" id="leave-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">Leave Management</h1>
+                    <div class="employee-section__actions">
+                        <button class="button button--primary" id="apply-leave-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Apply for Leave
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Leave Balance -->
+                <div class="leave-balance-section">
+                    <div class="balance-card">
+                        <div class="balance-icon balance-icon--primary">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/>
+                            </svg>
+                        </div>
+                        <div class="balance-content">
+                            <div class="balance-value" id="annual-leave-balance">20</div>
+                            <div class="balance-label">Annual Leave Days</div>
+                            <div class="balance-note">Available</div>
+                        </div>
+                    </div>
+
+                    <div class="balance-card">
+                        <div class="balance-icon balance-icon--success">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                        </div>
+                        <div class="balance-content">
+                            <div class="balance-value" id="sick-leave-balance">10</div>
+                            <div class="balance-label">Sick Leave Days</div>
+                            <div class="balance-note">Available</div>
+                        </div>
+                    </div>
+
+                    <div class="balance-card">
+                        <div class="balance-icon balance-icon--info">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <div class="balance-content">
+                            <div class="balance-value" id="personal-leave-balance">5</div>
+                            <div class="balance-label">Personal Leave Days</div>
+                            <div class="balance-note">Available</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leave Requests -->
+                <div class="leave-requests">
+                    <div class="requests-header">
+                        <h3>Leave Requests</h3>
+                        <div class="requests-filters">
+                            <select class="filter-select" id="leave-status-filter">
+                                <option value="">All Requests</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="leave-table-container">
+                        <table class="leave-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Days</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leave-requests-body">
+                                <!-- Leave requests loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tasks Tab -->
+        <section class="employee-tab" id="tasks-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">My Tasks</h1>
+                    <div class="employee-section__actions">
+                        <button class="button button--secondary button--small">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Task Summary -->
+                <div class="task-summary">
+                    <div class="task-summary-card">
+                        <div class="task-summary-icon task-summary-icon--pending">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <div class="task-summary-content">
+                            <div class="task-summary-value" id="pending-tasks-count">0</div>
+                            <div class="task-summary-label">Pending</div>
+                        </div>
+                    </div>
+
+                    <div class="task-summary-card">
+                        <div class="task-summary-icon task-summary-icon--progress">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                        </div>
+                        <div class="task-summary-content">
+                            <div class="task-summary-value" id="progress-tasks-count">0</div>
+                            <div class="task-summary-label">In Progress</div>
+                        </div>
+                    </div>
+
+                    <div class="task-summary-card">
+                        <div class="task-summary-icon task-summary-icon--completed">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 12l2 2 4-4"/>
+                                <circle cx="12" cy="12" r="9"/>
+                            </svg>
+                        </div>
+                        <div class="task-summary-content">
+                            <div class="task-summary-value" id="completed-tasks-count">0</div>
+                            <div class="task-summary-label">Completed</div>
+                        </div>
+                    </div>
+
+                    <div class="task-summary-card">
+                        <div class="task-summary-icon task-summary-icon--overdue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <div class="task-summary-content">
+                            <div class="task-summary-value" id="overdue-tasks-count">0</div>
+                            <div class="task-summary-label">Overdue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="tasks-list" id="tasks-list">
+                    <!-- Tasks loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Documents Tab -->
+        <section class="employee-tab" id="documents-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">Company Documents</h1>
+                </div>
+
+                <div class="documents-grid">
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                        </div>
+                        <div class="document-content">
+                            <h3 class="document-title">Employee Handbook</h3>
+                            <p class="document-description">Complete guide to company policies, procedures, and benefits.</p>
+                            <div class="document-meta">
+                                <span class="document-size">2.4 MB</span>
+                                <span class="document-type">PDF</span>
+                                <span class="document-updated">Updated: Dec 1, 2024</span>
+                            </div>
+                            <div class="document-actions">
+                                <button class="button button--primary button--small" onclick="downloadDocument('handbook')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Download
+                                </button>
+                                <button class="button button--ghost button--small" onclick="viewDocument('handbook')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div class="document-content">
+                            <h3 class="document-title">Security Policy</h3>
+                            <p class="document-description">Information security policies, procedures, and compliance requirements.</p>
+                            <div class="document-meta">
+                                <span class="document-size">1.8 MB</span>
+                                <span class="document-type">PDF</span>
+                                <span class="document-updated">Updated: Nov 15, 2024</span>
+                            </div>
+                            <div class="document-actions">
+                                <button class="button button--primary button--small" onclick="downloadDocument('policy')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7,10 12,15 17,10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Download
+                                </button>
+                                <button class="button button--ghost button--small" onclick="viewDocument('policy')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Tab -->
+        <section class="employee-tab" id="profile-tab">
+            <div class="employee-section">
+                <div class="employee-section__header">
+                    <h1 class="employee-section__title">My Profile</h1>
+                    <div class="employee-section__actions">
+                        <button class="button button--primary" id="edit-profile-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <span id="profile-avatar-text">UN</span>
+                            </div>
+                            <div class="profile-info">
+                                <h2 id="profile-name">User Name</h2>
+                                <p id="profile-role">Security Analyst</p>
+                                <p id="profile-department">Cybersecurity Department</p>
+                            </div>
+                        </div>
+
+                        <div class="profile-details">
+                            <div class="profile-section">
+                                <h3>Contact Information</h3>
+                                <div class="profile-fields">
+                                    <div class="profile-field">
+                                        <label>Email</label>
+                                        <div class="profile-value" id="profile-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7b0e081e093b161a0f0912181a151e0f0c1409100855181416">[email&#160;protected]</a></div>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Phone</label>
+                                        <div class="profile-value" id="profile-phone">+91 98765 43210</div>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Employee ID</label>
+                                        <div class="profile-value" id="profile-employee-id">EMP001</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h3>Employment Details</h3>
+                                <div class="profile-fields">
+                                    <div class="profile-field">
+                                        <label>Join Date</label>
+                                        <div class="profile-value" id="profile-join-date">January 1, 2023</div>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Manager</label>
+                                        <div class="profile-value" id="profile-manager">John Smith</div>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Location</label>
+                                        <div class="profile-value" id="profile-location">Bangalore, India</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h3>Skills & Certifications</h3>
+                                <div class="profile-tags">
+                                    <span class="tag">Penetration Testing</span>
+                                    <span class="tag">Network Security</span>
+                                    <span class="tag">Incident Response</span>
+                                    <span class="tag">CISSP</span>
+                                    <span class="tag">CEH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Leave Application Modal -->
+    <div class="modal" id="leave-modal">
+        <div class="modal__backdrop"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Apply for Leave</h3>
+                <button class="modal__close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="leave-form" class="form">
+                    <div class="form__group">
+                        <label class="form__label">Leave Type *</label>
+                        <select id="leave-type" class="form__select" required>
+                            <option value="">Select leave type...</option>
+                            <option value="annual">Annual Leave</option>
+                            <option value="sick">Sick Leave</option>
+                            <option value="personal">Personal Leave</option>
+                            <option value="emergency">Emergency Leave</option>
+                        </select>
+                    </div>
+                    <div class="form__grid">
+                        <div class="form__group">
+                            <label class="form__label">Start Date *</label>
+                            <input type="date" id="leave-start-date" class="form__input" required>
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">End Date *</label>
+                            <input type="date" id="leave-end-date" class="form__input" required>
+                        </div>
+                    </div>
+                    <div class="form__group">
+                        <label class="form__label">Reason *</label>
+                        <textarea id="leave-reason" class="form__textarea" rows="4" required placeholder="Please provide a reason for your leave request..."></textarea>
+                    </div>
+                    <div class="form__group">
+                        <label class="form__checkbox">
+                            <input type="checkbox" id="leave-half-day">
+                            <span class="form__checkmark"></span>
+                            <span class="form__checkbox-text">Half day leave</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal__footer">
+                <button class="button button--secondary" id="cancel-leave">Cancel</button>
+                <button class="button button--primary" id="submit-leave">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../assets/js/api.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    
+    <script>
+        // Employee Portal Manager
+        class EmployeePortal {
+            constructor() {
+                this.currentTab = 'dashboard';
+                this.currentUser = null;
+                this.csrfToken = '';
+                this.attendanceStatus = 'out';
+                this.init();
+            }
+
+            async init() {
+                await this.checkAuthentication();
+                await this.getCSRFToken();
+                this.bindEvents();
+                this.loadPortalData();
+                this.initClock();
+                this.generateQRCode();
+            }
+
+            async checkAuthentication() {
+                try {
+                    const response = await fetch('/api/me');
+                    if (!response.ok) {
+                        window.location.href = 'login.html?access_denied=true';
+                        return;
+                    }
+                    
+                    const data = await response.json();
+                    if (!data.authenticated) {
+                        window.location.href = 'login.html?access_denied=true';
+                        return;
+                    }
+
+                    this.currentUser = data.user;
+                    this.updateUserInfo();
+                    
+                } catch (error) {
+                    console.error('Authentication check failed:', error);
+                    window.location.href = 'login.html?session_expired=true';
+                }
+            }
+
+            async getCSRFToken() {
+                try {
+                    const response = await fetch('/api/csrf-token');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.csrfToken = data.token;
+                    }
+                } catch (error) {
+                    console.error('Failed to get CSRF token:', error);
+                }
+            }
+
+            updateUserInfo() {
+                const nameElement = document.getElementById('user-name');
+                const avatarElement = document.getElementById('user-avatar');
+                
+                if (nameElement) nameElement.textContent = this.currentUser.full_name || this.currentUser.username;
+                if (avatarElement) avatarElement.textContent = (this.currentUser.full_name || this.currentUser.username).charAt(0).toUpperCase();
+
+                // Update ID card info
+                this.updateIdCard();
+                this.updateProfile();
+            }
+
+            updateIdCard() {
+                document.getElementById('id-full-name').textContent = this.currentUser.full_name || this.currentUser.username;
+                document.getElementById('id-employee-id').textContent = `EMP${this.currentUser.id.toString().padStart(3, '0')}`;
+                document.getElementById('id-email').textContent = this.currentUser.email;
+                document.getElementById('photo-initials').textContent = (this.currentUser.full_name || this.currentUser.username).charAt(0).toUpperCase();
+            }
+
+            updateProfile() {
+                document.getElementById('profile-name').textContent = this.currentUser.full_name || this.currentUser.username;
+                document.getElementById('profile-email').textContent = this.currentUser.email;
+                document.getElementById('profile-employee-id').textContent = `EMP${this.currentUser.id.toString().padStart(3, '0')}`;
+                document.getElementById('profile-avatar-text').textContent = (this.currentUser.full_name || this.currentUser.username).charAt(0).toUpperCase();
+            }
+
+            bindEvents() {
+                // Navigation
+                document.querySelectorAll('.employee-nav__item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        const tab = e.currentTarget.dataset.tab;
+                        this.switchTab(tab);
+                    });
+                });
+
+                // Quick actions
+                document.querySelectorAll('[data-action]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const action = e.currentTarget.dataset.action;
+                        this.handleQuickAction(action);
+                    });
+                });
+
+                // User menu
+                document.getElementById('user-menu-toggle').addEventListener('click', () => {
+                    document.getElementById('user-dropdown').classList.toggle('show');
+                });
+
+                // Logout
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    this.handleLogout();
+                });
+
+                // Attendance
+                document.getElementById('clock-in-btn').addEventListener('click', () => {
+                    this.clockIn();
+                });
+
+                document.getElementById('clock-out-btn').addEventListener('click', () => {
+                    this.clockOut();
+                });
+
+                // Leave application
+                document.getElementById('apply-leave-btn').addEventListener('click', () => {
+                    this.openLeaveModal();
+                });
+
+                document.getElementById('submit-leave').addEventListener('click', () => {
+                    this.submitLeaveRequest();
+                });
+
+                // Modal events
+                this.bindModalEvents();
+
+                // Close dropdowns when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.employee-user__menu')) {
+                        document.getElementById('user-dropdown').classList.remove('show');
+                    }
+                });
+            }
+
+            bindModalEvents() {
+                // Close modals
+                document.querySelectorAll('.modal__close, .modal__backdrop').forEach(element => {
+                    element.addEventListener('click', (e) => {
+                        if (e.target === element) {
+                            this.closeModals();
+                        }
+                    });
+                });
+            }
+
+            switchTab(tabName) {
+                // Update navigation
+                document.querySelectorAll('.employee-nav__item').forEach(item => {
+                    item.classList.remove('employee-nav__item--active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('employee-nav__item--active');
+
+                // Update content
+                document.querySelectorAll('.employee-tab').forEach(tab => {
+                    tab.classList.remove('employee-tab--active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('employee-tab--active');
+
+                this.currentTab = tabName;
+
+                // Load tab-specific data
+                this.loadTabData(tabName);
+            }
+
+            async loadTabData(tabName) {
+                switch (tabName) {
+                    case 'dashboard':
+                        this.loadDashboardData();
+                        break;
+                    case 'attendance':
+                        this.loadAttendanceData();
+                        break;
+                    case 'leave':
+                        this.loadLeaveData();
+                        break;
+                    case 'tasks':
+                        this.loadTasksData();
+                        break;
+                }
+            }
+
+            async loadPortalData() {
+                this.loadDashboardData();
+            }
+
+            async loadDashboardData() {
+                // Load dashboard summary data
+                try {
+                    // This would fetch from various endpoints
+                    console.log('Loading dashboard data...');
+                } catch (error) {
+                    console.error('Failed to load dashboard data:', error);
+                }
+            }
+
+            async loadAttendanceData() {
+                try {
+                    const response = await fetch('/api/attendance/my');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.renderAttendanceHistory(data.records || []);
+                    }
+                } catch (error) {
+                    console.error('Failed to load attendance data:', error);
+                }
+            }
+
+            async loadLeaveData() {
+                try {
+                    const response = await fetch('/api/leave/my');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.renderLeaveRequests(data.requests || []);
+                    }
+                } catch (error) {
+                    console.error('Failed to load leave data:', error);
+                }
+            }
+
+            async loadTasksData() {
+                try {
+                    const response = await fetch('/api/tasks/my');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.renderTasks(data.tasks || []);
+                    }
+                } catch (error) {
+                    console.error('Failed to load tasks data:', error);
+                }
+            }
+
+            initClock() {
+                this.updateClock();
+                setInterval(() => this.updateClock(), 1000);
+            }
+
+            updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US');
+                const dateString = now.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                document.getElementById('current-time').textContent = timeString;
+                document.getElementById('current-date').textContent = dateString;
+            }
+
+            async clockIn() {
+                try {
+                    const response = await fetch('/api/attendance/clock-in', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ csrf_token: this.csrfToken })
+                    });
+
+                    if (response.ok) {
+                        this.attendanceStatus = 'in';
+                        this.updateAttendanceUI();
+                        this.showNotification('Successfully clocked in!', 'success');
+                    } else {
+                        throw new Error('Failed to clock in');
+                    }
+                } catch (error) {
+                    console.error('Clock in error:', error);
+                    this.showNotification('Failed to clock in. Please try again.', 'error');
+                }
+            }
+
+            async clockOut() {
+                try {
+                    const response = await fetch('/api/attendance/clock-out', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ csrf_token: this.csrfToken })
+                    });
+
+                    if (response.ok) {
+                        this.attendanceStatus = 'out';
+                        this.updateAttendanceUI();
+                        this.showNotification('Successfully clocked out!', 'success');
+                    } else {
+                        throw new Error('Failed to clock out');
+                    }
+                } catch (error) {
+                    console.error('Clock out error:', error);
+                    this.showNotification('Failed to clock out. Please try again.', 'error');
+                }
+            }
+
+            updateAttendanceUI() {
+                const clockInBtn = document.getElementById('clock-in-btn');
+                const clockOutBtn = document.getElementById('clock-out-btn');
+                const statusDisplay = document.getElementById('attendance-status-display');
+
+                if (this.attendanceStatus === 'in') {
+                    clockInBtn.disabled = true;
+                    clockOutBtn.disabled = false;
+                    statusDisplay.innerHTML = `
+                        <div class="status-indicator status-indicator--in">
+                            <span class="status-text">Currently Clocked In</span>
+                            <span class="status-time">Clocked in at: ${new Date().toLocaleTimeString()}</span>
+                        </div>
+                    `;
+                } else {
+                    clockInBtn.disabled = false;
+                    clockOutBtn.disabled = true;
+                    statusDisplay.innerHTML = `
+                        <div class="status-indicator status-indicator--out">
+                            <span class="status-text">Currently Clocked Out</span>
+                            <span class="status-time">Ready to clock in</span>
+                        </div>
+                    `;
+                }
+            }
+
+            generateQRCode() {
+                // Simple QR code generation (placeholder)
+                const canvas = document.getElementById('qr-canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Generate a simple pattern (in production, use a proper QR code library)
+                const size = 120;
+                const blockSize = 3;
+                
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, size, size);
+                
+                ctx.fillStyle = '#ffffff';
+                for (let i = 0; i < size; i += blockSize * 2) {
+                    for (let j = 0; j < size; j += blockSize * 2) {
+                        if (Math.random() > 0.5) {
+                            ctx.fillRect(i, j, blockSize, blockSize);
+                        }
+                    }
+                }
+            }
+
+            openLeaveModal() {
+                document.getElementById('leave-modal').classList.add('modal--active');
+            }
+
+            closeModals() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('modal--active');
+                });
+            }
+
+            async submitLeaveRequest() {
+                const leaveData = {
+                    type: document.getElementById('leave-type').value,
+                    start_date: document.getElementById('leave-start-date').value,
+                    end_date: document.getElementById('leave-end-date').value,
+                    reason: document.getElementById('leave-reason').value,
+                    half_day: document.getElementById('leave-half-day').checked,
+                    csrf_token: this.csrfToken
+                };
+
+                try {
+                    const response = await fetch('/api/leave/apply', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(leaveData)
+                    });
+
+                    if (response.ok) {
+                        this.showNotification('Leave request submitted successfully!', 'success');
+                        this.closeModals();
+                        this.loadLeaveData();
+                    } else {
+                        throw new Error('Failed to submit leave request');
+                    }
+                } catch (error) {
+                    console.error('Leave request error:', error);
+                    this.showNotification('Failed to submit leave request. Please try again.', 'error');
+                }
+            }
+
+            handleQuickAction(action) {
+                switch (action) {
+                    case 'clock-in':
+                        this.switchTab('attendance');
+                        break;
+                    case 'apply-leave':
+                        this.switchTab('leave');
+                        setTimeout(() => this.openLeaveModal(), 100);
+                        break;
+                    case 'view-tasks':
+                        this.switchTab('tasks');
+                        break;
+                    case 'digital-id':
+                        this.switchTab('id-card');
+                        break;
+                }
+            }
+
+            async handleLogout() {
+                try {
+                    await fetch('/api/auth/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ csrf_token: this.csrfToken })
+                    });
+                } catch (error) {
+                    console.error('Logout error:', error);
+                } finally {
+                    window.location.href = 'login.html';
+                }
+            }
+
+            renderAttendanceHistory(records) {
+                const tbody = document.getElementById('attendance-history-body');
+                
+                tbody.innerHTML = records.map(record => `
+                    <tr>
+                        <td>${this.formatDate(record.date)}</td>
+                        <td>${record.clock_in || '-'}</td>
+                        <td>${record.clock_out || '-'}</td>
+                        <td>${record.total_hours || '-'}</td>
+                        <td>
+                            <span class="badge badge--${record.status === 'present' ? 'success' : 'secondary'}">
+                                ${record.status}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            renderLeaveRequests(requests) {
+                const tbody = document.getElementById('leave-requests-body');
+                
+                tbody.innerHTML = requests.map(request => `
+                    <tr>
+                        <td>
+                            <span class="badge badge--${this.getLeaveTypeBadge(request.type)}">
+                                ${this.formatLeaveType(request.type)}
+                            </span>
+                        </td>
+                        <td>${this.formatDate(request.start_date)}</td>
+                        <td>${this.formatDate(request.end_date)}</td>
+                        <td>${request.days}</td>
+                        <td>${request.reason}</td>
+                        <td>
+                            <span class="badge badge--${this.getStatusBadge(request.status)}">
+                                ${request.status}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                ${request.status === 'pending' ? `
+                                    <button class="button button--ghost button--small" onclick="employeePortal.editLeaveRequest(${request.id})">
+                                        Edit
+                                    </button>
+                                    <button class="button button--danger button--small" onclick="employeePortal.cancelLeaveRequest(${request.id})">
+                                        Cancel
+                                    </button>
+                                ` : '-'}
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            renderTasks(tasks) {
+                const tasksList = document.getElementById('tasks-list');
+                
+                tasksList.innerHTML = tasks.map(task => `
+                    <div class="task-card">
+                        <div class="task-card__header">
+                            <h3 class="task-card__title">${this.escapeHtml(task.title)}</h3>
+                            <span class="badge badge--${this.getTaskPriorityBadge(task.priority)}">
+                                ${task.priority}
+                            </span>
+                        </div>
+                        <div class="task-card__content">
+                            <p class="task-card__description">${this.escapeHtml(task.description)}</p>
+                            <div class="task-card__meta">
+                                <span class="task-card__project">${task.project_name}</span>
+                                <span class="task-card__due">Due: ${this.formatDate(task.due_date)}</span>
+                            </div>
+                            <div class="task-card__progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${task.progress}%"></div>
+                                </div>
+                                <span class="progress-text">${task.progress}% complete</span>
+                            </div>
+                        </div>
+                        <div class="task-card__actions">
+                            <button class="button button--primary button--small" onclick="employeePortal.updateTaskProgress(${task.id})">
+                                Update Progress
+                            </button>
+                            <button class="button button--ghost button--small" onclick="employeePortal.viewTaskDetails(${task.id})">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Utility functions
+            formatDate(dateString) {
+                return new Date(dateString).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+
+            formatLeaveType(type) {
+                const types = {
+                    'annual': 'Annual',
+                    'sick': 'Sick',
+                    'personal': 'Personal',
+                    'emergency': 'Emergency'
+                };
+                return types[type] || type;
+            }
+
+            getLeaveTypeBadge(type) {
+                const badges = {
+                    'annual': 'primary',
+                    'sick': 'warning',
+                    'personal': 'info',
+                    'emergency': 'danger'
+                };
+                return badges[type] || 'secondary';
+            }
+
+            getStatusBadge(status) {
+                const badges = {
+                    'pending': 'warning',
+                    'approved': 'success',
+                    'rejected': 'danger'
+                };
+                return badges[status] || 'secondary';
+            }
+
+            getTaskPriorityBadge(priority) {
+                const badges = {
+                    'low': 'info',
+                    'medium': 'warning',
+                    'high': 'danger',
+                    'critical': 'danger'
+                };
+                return badges[priority] || 'secondary';
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            showNotification(message, type = 'info') {
+                // Simple notification implementation
+                const notification = document.createElement('div');
+                notification.className = `notification notification--${type}`;
+                notification.textContent = message;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('notification--show');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.classList.remove('notification--show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // Global functions for button actions
+        function downloadDocument(type) {
+            window.open(`/api/documents/${type}`, '_blank');
+        }
+
+        function viewDocument(type) {
+            window.open(`/api/documents/${type}?view=true`, '_blank');
+        }
+
+        // Initialize employee portal
+        let employeePortal;
+        document.addEventListener('DOMContentLoaded', () => {
+            employeePortal = new EmployeePortal();
+        });
+
+        // Add employee-specific CSS
+        const employeeStyle = document.createElement('style');
+        employeeStyle.textContent = `
+            .employee-page {
+                background: var(--color-bg);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .employee-header {
+                background: rgba(var(--color-bg-secondary-rgb), 0.95);
+                border-bottom: 1px solid var(--color-border);
+                padding: 1rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                backdrop-filter: blur(10px);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .employee-header__left {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+            }
+
+            .employee-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+                color: var(--color-text);
+            }
+
+            .employee-nav {
+                display: flex;
+                gap: 1rem;
+            }
+
+            .employee-nav__item {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background: none;
+                border: 1px solid transparent;
+                border-radius: var(--border-radius);
+                color: var(--color-text-secondary);
+                text-decoration: none;
+                transition: all var(--transition-fast);
+                cursor: pointer;
+                font-size: 0.875rem;
+            }
+
+            .employee-nav__item:hover {
+                color: var(--color-primary);
+                border-color: var(--color-border);
+                background: rgba(var(--color-primary-rgb), 0.05);
+            }
+
+            .employee-nav__item--active {
+                color: var(--color-primary);
+                border-color: var(--color-primary);
+                background: rgba(var(--color-primary-rgb), 0.1);
+            }
+
+            .employee-main {
+                flex: 1;
+                padding: 2rem;
+                max-width: 100vw;
+                overflow-x: auto;
+            }
+
+            .employee-tab {
+                display: none;
+            }
+
+            .employee-tab--active {
+                display: block;
+            }
+
+            .employee-section__header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 2rem;
+            }
+
+            .employee-section__title {
+                font-size: 2rem;
+                font-weight: 600;
+                color: var(--color-text);
+                margin: 0;
+            }
+
+            .quick-actions-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .quick-action-card {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 1.5rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                cursor: pointer;
+                transition: all var(--transition-fast);
+            }
+
+            .quick-action-card:hover {
+                border-color: var(--color-primary);
+                background: rgba(var(--color-primary-rgb), 0.05);
+            }
+
+            .quick-action-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: var(--border-radius);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .quick-action-icon--primary { background: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary); }
+            .quick-action-icon--success { background: rgba(var(--color-success-rgb), 0.1); color: var(--color-success); }
+            .quick-action-icon--warning { background: rgba(var(--color-warning-rgb), 0.1); color: var(--color-warning); }
+            .quick-action-icon--info { background: rgba(var(--color-info-rgb), 0.1); color: var(--color-info); }
+
+            .quick-action-content h3 {
+                font-size: 1.125rem;
+                font-weight: 600;
+                color: var(--color-text);
+                margin: 0 0 0.25rem 0;
+            }
+
+            .quick-action-content p {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+                margin: 0 0 0.5rem 0;
+            }
+
+            .quick-action-status {
+                font-size: 0.75rem;
+                color: var(--color-primary);
+                font-weight: 500;
+            }
+
+            .digital-id-card {
+                max-width: 400px;
+                margin: 0 auto;
+                background: linear-gradient(135deg, var(--color-bg-secondary), rgba(var(--color-primary-rgb), 0.05));
+                border: 2px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 1.5rem;
+                box-shadow: 0 8px 32px rgba(0, 255, 159, 0.1);
+            }
+
+            .id-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .id-card-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 600;
+                color: var(--color-text);
+            }
+
+            .id-card-type {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+                background: rgba(var(--color-primary-rgb), 0.1);
+                padding: 0.25rem 0.75rem;
+                border-radius: var(--border-radius);
+            }
+
+            .id-card-content {
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+                gap: 1.5rem;
+                align-items: start;
+            }
+
+            .employee-photo {
+                width: 80px;
+                height: 80px;
+                border-radius: var(--border-radius);
+                background: var(--color-primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 2rem;
+                font-weight: 600;
+            }
+
+            .id-card-info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .id-card-field label {
+                font-size: 0.75rem;
+                color: var(--color-text-secondary);
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+
+            .id-card-value {
+                font-size: 0.875rem;
+                color: var(--color-text);
+                font-weight: 500;
+            }
+
+            .id-card-qr {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .qr-code {
+                background: white;
+                padding: 0.5rem;
+                border-radius: var(--border-radius);
+            }
+
+            .qr-label {
+                font-size: 0.75rem;
+                color: var(--color-text-secondary);
+                text-align: center;
+            }
+
+            .attendance-clock {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 2rem;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .clock-display {
+                margin-bottom: 2rem;
+            }
+
+            .current-time {
+                font-size: 3rem;
+                font-weight: 700;
+                color: var(--color-primary);
+                margin-bottom: 0.5rem;
+            }
+
+            .current-date {
+                font-size: 1.125rem;
+                color: var(--color-text-secondary);
+            }
+
+            .attendance-status {
+                margin-bottom: 2rem;
+            }
+
+            .status-indicator {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 1rem 2rem;
+                border-radius: var(--border-radius);
+                border: 1px solid;
+            }
+
+            .status-indicator--in {
+                background: rgba(var(--color-success-rgb), 0.1);
+                border-color: var(--color-success);
+                color: var(--color-success);
+            }
+
+            .status-indicator--out {
+                background: rgba(var(--color-warning-rgb), 0.1);
+                border-color: var(--color-warning);
+                color: var(--color-warning);
+            }
+
+            .attendance-actions {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .attendance-summary {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .summary-card {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 1.5rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .summary-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: var(--border-radius);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .summary-value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--color-text);
+                line-height: 1;
+            }
+
+            .summary-label {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+            }
+
+            .leave-balance-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .balance-card {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 2rem;
+                text-align: center;
+            }
+
+            .balance-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1rem;
+            }
+
+            .balance-value {
+                font-size: 3rem;
+                font-weight: 700;
+                color: var(--color-text);
+                line-height: 1;
+                margin-bottom: 0.5rem;
+            }
+
+            .balance-label {
+                font-size: 1rem;
+                color: var(--color-text);
+                font-weight: 500;
+                margin-bottom: 0.25rem;
+            }
+
+            .balance-note {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+            }
+
+            .task-summary {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .task-summary-card {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .task-summary-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: var(--border-radius);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .task-summary-value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--color-text);
+                line-height: 1;
+            }
+
+            .task-summary-label {
+                font-size: 0.75rem;
+                color: var(--color-text-secondary);
+            }
+
+            .documents-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+            }
+
+            .document-card {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 1.5rem;
+                display: flex;
+                gap: 1rem;
+            }
+
+            .document-icon {
+                color: var(--color-primary);
+                flex-shrink: 0;
+            }
+
+            .document-title {
+                font-size: 1.125rem;
+                font-weight: 600;
+                color: var(--color-text);
+                margin: 0 0 0.5rem 0;
+            }
+
+            .document-description {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+                margin: 0 0 1rem 0;
+            }
+
+            .document-meta {
+                display: flex;
+                gap: 1rem;
+                font-size: 0.75rem;
+                color: var(--color-text-secondary);
+                margin-bottom: 1rem;
+            }
+
+            .document-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .profile-card {
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                border-radius: var(--border-radius-lg);
+                padding: 2rem;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .profile-header {
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+                padding-bottom: 2rem;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .profile-avatar {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: var(--color-primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 2rem;
+                font-weight: 600;
+            }
+
+            .profile-info h2 {
+                font-size: 1.5rem;
+                color: var(--color-text);
+                margin: 0 0 0.25rem 0;
+            }
+
+            .profile-info p {
+                color: var(--color-text-secondary);
+                margin: 0;
+                font-size: 0.875rem;
+            }
+
+            .profile-section {
+                margin-bottom: 2rem;
+            }
+
+            .profile-section h3 {
+                font-size: 1.125rem;
+                color: var(--color-text);
+                margin: 0 0 1rem 0;
+                padding-bottom: 0.5rem;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .profile-fields {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .profile-field label {
+                font-size: 0.875rem;
+                color: var(--color-text-secondary);
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+
+            .profile-value {
+                font-size: 0.875rem;
+                color: var(--color-text);
+                font-weight: 500;
+            }
+
+            .profile-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .tag {
+                background: rgba(var(--color-primary-rgb), 0.1);
+                color: var(--color-primary);
+                padding: 0.25rem 0.75rem;
+                border-radius: var(--border-radius);
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: var(--border-radius);
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                transform: translateX(100%);
+                opacity: 0;
+                transition: all var(--transition-normal);
+            }
+
+            .notification--show {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            .notification--success { background: var(--color-success); }
+            .notification--error { background: var(--color-danger); }
+            .notification--warning { background: var(--color-warning); }
+            .notification--info { background: var(--color-info); }
+
+            @media (max-width: 768px) {
+                .employee-header {
+                    padding: 1rem;
+                }
+
+                .employee-nav {
+                    display: none;
+                }
+
+                .employee-main {
+                    padding: 1rem;
+                }
+
+                .quick-actions-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .attendance-summary {
+                    grid-template-columns: 1fr;
+                }
+
+                .leave-balance-section {
+                    grid-template-columns: 1fr;
+                }
+
+                .task-summary {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .documents-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .id-card-content {
+                    grid-template-columns: 1fr;
+                    text-align: center;
+                }
+
+                .profile-header {
+                    flex-direction: column;
+                    text-align: center;
+                }
+            }
+        `;
+        document.head.appendChild(employeeStyle);
+    </script>
+</body>
+</html>

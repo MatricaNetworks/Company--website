@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Matrica Networks Pvt Ltd</title>
+    <meta name="description" content="Comprehensive cybersecurity services including PenTesting, SOC, Threat Hunting, DFIR, Cloud Security, and Zero Trust implementation with compliance certifications.">
+    <meta name="keywords" content="cybersecurity services, penetration testing, SOC, threat hunting, DFIR, cloud security, zero trust, ISO 27001, SOC 2, NIST">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/neon.css">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <img src="assets/images/logo.svg" alt="Matrica Networks" class="logo-icon">
+                    <span>MATRICA NETWORKS</span>
+                </a>
+                
+                <nav class="nav">
+                    <ul class="nav-menu" id="nav-menu">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/products.html" class="nav-link">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/services.html" class="nav-link active">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/blog.html" class="nav-link">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/careers.html" class="nav-link">Careers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/contact.html" class="nav-link">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/portal/login.html" class="nav-link btn btn-primary btn-sm">Portal</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21 12.79a9 9 0 1 1-6.21-6.21 7 7 0 0 0 6.21 6.21z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero cyber-grid" style="min-height: 60vh;">
+            <div class="hero-content">
+                <h1 class="hero-title" style="font-size: 3rem;">
+                    <span class="gradient-neon-text">Cybersecurity as a Service</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Comprehensive security solutions tailored to your organization's needs<br>
+                    From threat assessment to incident response and beyond
+                </p>
+            </div>
+        </section>
+
+        <!-- Services Overview -->
+        <section class="section" id="services-overview">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title neon-text-static">Our Security Services</h2>
+                    <p class="section-description">
+                        Matrica Networks provides end-to-end cybersecurity services designed to protect, 
+                        detect, and respond to evolving threats across your entire digital infrastructure.
+                    </p>
+                </div>
+                
+                <div class="grid-section grid-3">
+                    <!-- Penetration Testing -->
+                    <div class="card card-neon hover-glow" id="penetration-testing">
+                        <div class="card-header">
+                            <div class="text-4xl mb-4 neon-text">🎯</div>
+                            <h3 class="card-title">Penetration Testing</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary mb-4">
+                                Comprehensive security assessments to identify vulnerabilities 
+                                before malicious actors can exploit them.
+                            </p>
+                            <ul class="text-sm text-secondary space-y-1 mb-4">
+                                <li>• External & Internal Network Testing</li>
+                                <li>• Web Application Security Assessment</li>
+                                <li>• Mobile Application Testing</li>
+                                <li>• Social Engineering Simulations</li>
+                                <li>• Wireless Network Security Testing</li>
+                                <li>• Red Team Exercises</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-danger">Critical</span>
+                                <span class="badge badge-primary">OWASP</span>
+                                <span class="badge badge-secondary">PTES</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SOC Services -->
+                    <div class="card card-neon hover-glow" id="soc">
+                        <div class="card-header">
+                            <div class="text-4xl mb-4 neon-text-green">🛡️</div>
+                            <h3 class="card-title">SOC Services</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary mb-4">
+                                24/7 Security Operations Center providing continuous monitoring 
+                                and rapid incident response capabilities.
+                            </p>
+                            <ul class="text-sm text-secondary space-y-1 mb-4">
+                                <li>• 24/7/365 Security Monitoring</li>
+                                <li>• Real-time Threat Detection</li>
+                                <li>• Incident Response & Management</li>
+                                <li>• Security Event Correlation</li>
+                                <li>• Threat Intelligence Integration</li>
+                                <li>• Compliance Reporting</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-success">24/7</span>
+                                <span class="badge badge-warning">SIEM</span>
+                                <span class="badge badge-primary">SOC 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threat Hunting -->
+                    <div class="card card-neon hover-glow" id="threat-hunting">
+                        <div class="card-header">
+                            <div class="text-4xl mb-4 neon-text-pink">🔍</div>
+                            <h3 class="card-title">Threat Hunting</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary mb-4">
+                                Proactive threat hunting services to identify advanced persistent 
+                                threats and hidden adversaries in your environment.
+                            </p>
+                            <ul class="text-sm text-secondary space-y-1 mb-4">
+                                <li>• Advanced Persistent Threat (APT) Detection</li>
+                                <li>• Behavioral Analytics & Anomaly Detection</li>
+                                <li>• Hypothesis-driven Investigations</li>
+                                <li>• Threat Intelligence Correlation</li>
+                                <li>• Custom IOC Development</li>
+                                <li>• Purple Team Collaboration</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-danger">APT</span>
+                                <span class="badge badge-warning">AI/ML</span>
+                                <span class="badge badge-secondary">MITRE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DFIR -->
+                    <div class="card card-neon hover-glow" id="dfir">
+                        <div class="card-header">
+                            <div class="text-4xl mb-4 text-neon-orange">🚨</div>
+                            <h3 class="card-title">Digital Forensics & Incident Response</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary mb-4">
+                                Expert digital forensics and incident response services for 
+                                rapid containment, investigation, and recovery.
+                            </p>
+                            <ul class="text-sm text-secondary space-y-1 mb-4">
+                                <li>• Emergency Incident Response</li>
+                                <li>• Digital Evidence Collection</li>
+                                <li>• Malware Analysis & Reverse Engineering</li>
+                                <li>• Network Forensics</li>
+                                <li>• Memory & Disk Analysis</li>
+                                <li>• Legal Support & Expert Testimony</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-danger">Emergency</span>
+                                <span class="badge badge-primary">ISO 27037</span>
+                                <span class="badge badge-secondary">SANS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cloud Security -->
+                    <div class="card card-neon hover-glow" id="cloud-security">
+                        <div class="card-header">
+                            <div class="text-4xl mb-4 neon-text">☁️</div>
+                            <h3 class="card-title">Cloud Security</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary mb-4">
+                                Comprehensive cloud security services for AWS, Azure, GCP, 
+                                and multi-cloud environments.
+                            </p>
+                            <ul class="text-sm text-secondary space-y-1 mb-4">
+                                <li>• Cloud Security Architecture Review</li>
+                                <li>• Configuration Assessment & Hardening</li>
+                                <li>• Container & Kubernetes Security</li>
+                                <li>• DevSecOps Integration</li>
+                                <li>• Cloud Compliance Auditing</li>
+                                <li>• Multi-Cloud Security Management</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-primary">AWS</span>
+                                <span class="badge badge-success">Azure</span>
+                                <span class="badge badge-warning">GCP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zero Trust -->
+                    <div class="card card-neon hover-glow" id="zero-trust">
+                        <div class="card-header">
+                            <div class="text-4xl mb-4 neon-text-green">🔐</div>
+                            <h3 class="card-title">Zero Trust Implementation</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-secondary mb-4">
+                                Strategic implementation of Zero Trust architecture to minimize 
+                                attack surface and improve security posture.
+                            </p>
+                            <ul class="text-sm text-secondary space-y-1 mb-4">
+                                <li>• Zero Trust Strategy Development</li>
+                                <li>• Identity & Access Management (IAM)</li>
+                                <li>• Network Micro-segmentation</li>
+                                <li>• Endpoint Protection & EDR</li>
+                                <li>• Privileged Access Management</li>
+                                <li>• Continuous Verification Framework</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-success">ZTNA</span>
+                                <span class="badge badge-primary">NIST 800-207</span>
+                                <span class="badge badge-warning">Never Trust</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compliance & Frameworks -->
+        <section class="section bg-secondary" id="compliance">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Compliance & Frameworks</h2>
+                    <p class="section-description">
+                        Our services align with industry-leading security frameworks and compliance standards 
+                        to ensure your organization meets regulatory requirements and best practices.
+                    </p>
+                </div>
+                
+                <!-- Compliance Badges -->
+                <div class="grid-section grid-4 mb-8">
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text">🔒</div>
+                            <h4 class="card-title text-lg">ISO 27001</h4>
+                            <p class="text-sm text-secondary">Information Security Management Systems</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text-green">📊</div>
+                            <h4 class="card-title text-lg">SOC 2 Type II</h4>
+                            <p class="text-sm text-secondary">Service Organization Control 2</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text-pink">🛡️</div>
+                            <h4 class="card-title text-lg">NIST CSF</h4>
+                            <p class="text-sm text-secondary">Cybersecurity Framework</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 text-neon-orange">⚙️</div>
+                            <h4 class="card-title text-lg">CIS Controls</h4>
+                            <p class="text-sm text-secondary">Center for Internet Security</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text">💳</div>
+                            <h4 class="card-title text-lg">PCI DSS</h4>
+                            <p class="text-sm text-secondary">Payment Card Industry Data Security</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text-green">🏥</div>
+                            <h4 class="card-title text-lg">HIPAA</h4>
+                            <p class="text-sm text-secondary">Health Insurance Portability</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text-pink">🇪🇺</div>
+                            <h4 class="card-title text-lg">GDPR</h4>
+                            <p class="text-sm text-secondary">General Data Protection Regulation</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card text-center hover-glow">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 text-neon-orange">🏛️</div>
+                            <h4 class="card-title text-lg">FedRAMP</h4>
+                            <p class="text-sm text-secondary">Federal Risk Authorization Management</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service-Framework Mapping -->
+        <section class="section" id="service-framework-mapping">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Service & Framework Alignment</h2>
+                    <p class="section-description">
+                        Comprehensive mapping of our services to compliance frameworks and industry standards.
+                    </p>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>ISO 27001</th>
+                                <th>SOC 2</th>
+                                <th>NIST CSF</th>
+                                <th>CIS</th>
+                                <th>PCI DSS</th>
+                                <th>HIPAA</th>
+                                <th>GDPR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Penetration Testing</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SOC Services</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Threat Hunting</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DFIR</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cloud Security</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zero Trust</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-8">
+                    <div class="alert alert-info">
+                        <div class="alert-icon">ℹ️</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Compliance Assurance</div>
+                            <p>All our services are designed to help organizations achieve and maintain compliance with relevant regulatory frameworks. We provide detailed documentation, evidence collection, and audit support to ensure successful compliance assessments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Process -->
+        <section class="section bg-secondary" id="process">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Our Service Process</h2>
+                    <p class="section-description">
+                        A structured approach to delivering exceptional cybersecurity services with measurable outcomes.
+                    </p>
+                </div>
+                
+                <div class="grid-section grid-4">
+                    <div class="card card-neon text-center">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text">📋</div>
+                            <h4 class="card-title">1. Assessment</h4>
+                            <p class="text-sm text-secondary">
+                                Comprehensive evaluation of your current security posture, 
+                                infrastructure, and risk landscape.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-neon text-center">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text-green">📊</div>
+                            <h4 class="card-title">2. Planning</h4>
+                            <p class="text-sm text-secondary">
+                                Strategic planning and roadmap development tailored to your 
+                                specific security requirements and business objectives.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-neon text-center">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 neon-text-pink">⚙️</div>
+                            <h4 class="card-title">3. Implementation</h4>
+                            <p class="text-sm text-secondary">
+                                Expert implementation of security controls, processes, 
+                                and technologies with minimal business disruption.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-neon text-center">
+                        <div class="card-body">
+                            <div class="text-4xl mb-4 text-neon-orange">📈</div>
+                            <h4 class="card-title">4. Optimization</h4>
+                            <p class="text-sm text-secondary">
+                                Continuous monitoring, optimization, and improvement 
+                                to ensure long-term security effectiveness.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Tiers -->
+        <section class="section" id="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Service Packages</h2>
+                    <p class="section-description">
+                        Flexible service packages designed to meet organizations of all sizes and security maturity levels.
+                    </p>
+                </div>
+                
+                <div class="grid-section grid-3">
+                    <!-- Essential Package -->
+                    <div class="card hover-glow">
+                        <div class="card-header">
+                            <h3 class="card-title text-xl">Essential</h3>
+                            <p class="text-sm text-secondary">For small to medium businesses</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-3xl font-bold text-accent mb-4">$5,000<span class="text-sm">/month</span></div>
+                            <ul class="text-sm text-secondary space-y-2 mb-6">
+                                <li>• Quarterly Penetration Testing</li>
+                                <li>• Basic SOC Monitoring (Business Hours)</li>
+                                <li>• Incident Response Support</li>
+                                <li>• Compliance Gap Analysis</li>
+                                <li>• Monthly Security Reports</li>
+                                <li>• Email & Phone Support</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="badge badge-primary">PenTest</span>
+                                <span class="badge badge-secondary">SOC</span>
+                                <span class="badge badge-success">Support</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/contact.html?package=essential" class="btn btn-secondary btn-block">Get Started</a>
+                        </div>
+                    </div>
+
+                    <!-- Professional Package -->
+                    <div class="card card-neon hover-glow">
+                        <div class="card-header">
+                            <h3 class="card-title text-xl">Professional</h3>
+                            <p class="text-sm text-secondary">For growing enterprises</p>
+                            <span class="badge badge-success" style="position: absolute; top: 10px; right: 10px;">Popular</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-3xl font-bold text-accent mb-4">$15,000<span class="text-sm">/month</span></div>
+                            <ul class="text-sm text-secondary space-y-2 mb-6">
+                                <li>• Monthly Penetration Testing</li>
+                                <li>• 24/7 SOC Monitoring</li>
+                                <li>• Advanced Threat Hunting</li>
+                                <li>• Cloud Security Assessment</li>
+                                <li>• DFIR Retainer Services</li>
+                                <li>• Zero Trust Planning</li>
+                                <li>• Dedicated Security Consultant</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="badge badge-primary">24/7 SOC</span>
+                                <span class="badge badge-warning">Threat Hunting</span>
+                                <span class="badge badge-success">DFIR</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/contact.html?package=professional" class="btn btn-neon btn-block">Get Started</a>
+                        </div>
+                    </div>
+
+                    <!-- Enterprise Package -->
+                    <div class="card hover-glow">
+                        <div class="card-header">
+                            <h3 class="card-title text-xl">Enterprise</h3>
+                            <p class="text-sm text-secondary">For large organizations</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-3xl font-bold text-accent mb-4">Custom<span class="text-sm"> pricing</span></div>
+                            <ul class="text-sm text-secondary space-y-2 mb-6">
+                                <li>• Continuous Security Testing</li>
+                                <li>• Premium 24/7 SOC with SLA</li>
+                                <li>• Advanced Purple Team Exercises</li>
+                                <li>• Complete Zero Trust Implementation</li>
+                                <li>• Priority DFIR Response</li>
+                                <li>• Custom Compliance Programs</li>
+                                <li>• Dedicated Security Team</li>
+                                <li>• Executive Security Briefings</li>
+                            </ul>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="badge badge-danger">Priority</span>
+                                <span class="badge badge-warning">Purple Team</span>
+                                <span class="badge badge-success">Custom</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/contact.html?package=enterprise" class="btn btn-secondary btn-block">Contact Sales</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section" id="services-cta">
+            <div class="container">
+                <div class="card card-neon pulse-ring">
+                    <div class="card-body p-8 text-center">
+                        <h2 class="text-3xl mb-4 gradient-neon-text">Ready to Enhance Your Security Posture?</h2>
+                        <p class="text-lg text-secondary mb-8 max-w-2xl mx-auto">
+                            Let our cybersecurity experts assess your current security posture and 
+                            recommend the optimal service package for your organization's needs.
+                        </p>
+                        
+                        <div class="flex justify-center gap-4 flex-wrap mb-8">
+                            <a href="/contact.html?intent=consultation" class="btn btn-neon btn-lg">
+                                Schedule Consultation
+                            </a>
+                            <a href="/contact.html?intent=assessment" class="btn btn-secondary btn-lg">
+                                Request Assessment
+                            </a>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-8 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-accent">99.9%</div>
+                                <div class="text-sm text-muted">Threat Detection Rate</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-accent">< 15min</div>
+                                <div class="text-sm text-muted">Average Response Time</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-accent">100%</div>
+                                <div class="text-sm text-muted">Compliance Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/products.html">Products</a></li>
+                            <li><a href="/services.html">Services</a></li>
+                            <li><a href="/blog.html">Blog</a></li>
+                            <li><a href="/contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Services</h4>
+                        <ul>
+                            <li><a href="#penetration-testing">Penetration Testing</a></li>
+                            <li><a href="#soc">SOC Services</a></li>
+                            <li><a href="#threat-hunting">Threat Hunting</a></li>
+                            <li><a href="#dfir">DFIR</a></li>
+                            <li><a href="#cloud-security">Cloud Security</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="/portal/login.html">Client Portal</a></li>
+                            <li><a href="/contact.html">Support Center</a></li>
+                            <li><a href="/contact.html">Emergency Response</a></li>
+                            <li><a href="/blog.html">Knowledge Base</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#" class="social-link">LinkedIn</a></li>
+                            <li><a href="#" class="social-link">Twitter</a></li>
+                            <li><a href="#" class="social-link">GitHub</a></li>
+                            <li><a href="/contact.html">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2024 Matrica Networks Pvt Ltd. All rights reserved.
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="LinkedIn">📊</a>
+                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                        <a href="#" class="social-link" aria-label="GitHub">💻</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/ui.js"></script>
+</body>
+</html>

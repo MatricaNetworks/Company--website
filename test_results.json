@@ -1,0 +1,129 @@
+{
+  "timestamp": "2025-08-20T02:46:55.276064",
+  "target_url": "http://localhost:8003",
+  "total_tests": 17,
+  "passed": 11,
+  "failed": 1,
+  "warnings": 5,
+  "tests": [
+    {
+      "test": "Server Connectivity",
+      "status": "PASS",
+      "message": "Server is accessible",
+      "timestamp": "2025-08-20T02:46:54.301014",
+      "details": {}
+    },
+    {
+      "test": "Login Page Elements",
+      "status": "PASS",
+      "message": "All login elements present",
+      "timestamp": "2025-08-20T02:46:54.303665",
+      "details": {}
+    },
+    {
+      "test": "CSS File /assets/css/base.css",
+      "status": "PASS",
+      "message": "CSS file loads correctly",
+      "timestamp": "2025-08-20T02:46:54.305269",
+      "details": {}
+    },
+    {
+      "test": "CSS File /assets/css/layout.css",
+      "status": "PASS",
+      "message": "CSS file loads correctly",
+      "timestamp": "2025-08-20T02:46:54.306721",
+      "details": {}
+    },
+    {
+      "test": "CSS File /assets/css/components.css",
+      "status": "PASS",
+      "message": "CSS file loads correctly",
+      "timestamp": "2025-08-20T02:46:54.308775",
+      "details": {}
+    },
+    {
+      "test": "CSS File /assets/css/neon.css",
+      "status": "PASS",
+      "message": "CSS file loads correctly",
+      "timestamp": "2025-08-20T02:46:54.310249",
+      "details": {}
+    },
+    {
+      "test": "Login Styling",
+      "status": "PASS",
+      "message": "Login styling elements found: login_container, login_box, matrix_background",
+      "timestamp": "2025-08-20T02:46:54.312698",
+      "details": {}
+    },
+    {
+      "test": "Auth Endpoint /api/me",
+      "status": "WARN",
+      "message": "Unexpected response: {'error': 'Authentication required'}",
+      "timestamp": "2025-08-20T02:46:54.314198",
+      "details": {}
+    },
+    {
+      "test": "Invalid Login Test",
+      "status": "PASS",
+      "message": "Correctly rejects invalid credentials",
+      "timestamp": "2025-08-20T02:46:54.337528",
+      "details": {}
+    },
+    {
+      "test": "Valid Login Test (admin)",
+      "status": "PASS",
+      "message": "Successfully authenticated admin",
+      "timestamp": "2025-08-20T02:46:54.383167",
+      "details": {}
+    },
+    {
+      "test": "Logout Test (admin)",
+      "status": "WARN",
+      "message": "Logout returned 401",
+      "timestamp": "2025-08-20T02:46:54.384813",
+      "details": {}
+    },
+    {
+      "test": "Valid Login Test (employee)",
+      "status": "FAIL",
+      "message": "Login response missing required fields",
+      "timestamp": "2025-08-20T02:46:54.422586",
+      "details": {}
+    },
+    {
+      "test": "Portal Access /portal/admin.html",
+      "status": "WARN",
+      "message": "Portal page missing auth check script",
+      "timestamp": "2025-08-20T02:46:54.424929",
+      "details": {}
+    },
+    {
+      "test": "Portal Access /portal/employee.html",
+      "status": "WARN",
+      "message": "Portal page missing auth check script",
+      "timestamp": "2025-08-20T02:46:54.426670",
+      "details": {}
+    },
+    {
+      "test": "Rate Limiting",
+      "status": "WARN",
+      "message": "Rate limiting not triggered (may need more attempts)",
+      "timestamp": "2025-08-20T02:46:55.272446",
+      "details": {}
+    },
+    {
+      "test": "Security Headers",
+      "status": "PASS",
+      "message": "All security headers present",
+      "timestamp": "2025-08-20T02:46:55.274640",
+      "details": {}
+    },
+    {
+      "test": "SQL Injection Protection",
+      "status": "PASS",
+      "message": "Blocked SQL injection attempt: ' OR 1=1--...",
+      "timestamp": "2025-08-20T02:46:55.276014",
+      "details": {}
+    }
+  ]
+}

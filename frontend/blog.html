@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Matrica Networks</title>
+    <meta name="description" content="Cybersecurity insights, updates, and case studies from Matrica Networks">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/neon.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.png">
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-rain" class="matrix-background"></canvas>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">
+                <img src="assets/images/logo.svg" alt="Matrica Networks" width="40" height="40">
+                <span class="neon-text">Matrica Networks</span>
+            </a>
+
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="products.html" class="nav__link">Products</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="services.html" class="nav__link">Services</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="blog.html" class="nav__link nav__link--active">Blog</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="careers.html" class="nav__link">Careers</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="contact.html" class="nav__link">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="nav__close" id="nav-close">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="nav__actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21 12.79a9 9 0 1 1-6.21-6.21 7 7 0 0 0 6.21 6.21z"></path>
+                    </svg>
+                </button>
+                
+                <a href="portal/login.html" class="button button--secondary button--small">Portal</a>
+                <div class="nav__toggle" id="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero hero--small">
+            <div class="container">
+                <div class="hero__content">
+                    <h1 class="hero__title" data-animation="glow">
+                        Cybersecurity <span class="neon-text">Insights</span>
+                    </h1>
+                    <p class="hero__description">
+                        Stay informed with the latest cybersecurity trends, research findings, and real-world case studies from our security experts.
+                    </p>
+                </div>
+            </div>
+            <div class="hero__scanner"></div>
+        </section>
+
+        <!-- Blog Content -->
+        <section class="section">
+            <div class="container">
+                <!-- Blog Controls -->
+                <div class="blog-controls">
+                    <!-- Category Tabs -->
+                    <div class="tabs">
+                        <button class="tab tab--active" data-tab="all" data-animation="neon-pulse">
+                            All Content
+                        </button>
+                        <button class="tab" data-tab="blog" data-animation="neon-pulse">
+                            Blogs
+                        </button>
+                        <button class="tab" data-tab="post" data-animation="neon-pulse">
+                            Updates
+                        </button>
+                        <button class="tab" data-tab="case" data-animation="neon-pulse">
+                            Case Studies
+                        </button>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="blog-filters">
+                        <div class="search-box">
+                            <input type="text" id="blog-search" placeholder="Search articles..." class="search-input">
+                            <button class="search-btn" id="search-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21L16.65 16.65"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <select id="sort-order" class="select">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="title">Title A-Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-container" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading cybersecurity insights...</p>
+                </div>
+
+                <!-- Blog Grid -->
+                <div class="blog-grid" id="blog-grid">
+                    <!-- Content loaded dynamically -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination loaded dynamically -->
+                </div>
+
+                <!-- No Results -->
+                <div class="no-results" id="no-results" style="display: none;">
+                    <div class="no-results__icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <path d="M14.828 14.828a4 4 0 0 1-5.656-5.656"/>
+                            <path d="M9 9l6 6"/>
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21L16.65 16.65"/>
+                        </svg>
+                    </div>
+                    <h3>No articles found</h3>
+                    <p>Try adjusting your search criteria or browse all content.</p>
+                    <button class="button button--primary" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Section -->
+        <section class="section section--dark">
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title">Featured Content</h2>
+                    <p class="section__description">
+                        Highlighted insights and case studies from our cybersecurity experts
+                    </p>
+                </div>
+
+                <div class="featured-grid" id="featured-content">
+                    <!-- Featured content loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup -->
+        <section class="section">
+            <div class="container">
+                <div class="newsletter">
+                    <div class="newsletter__content">
+                        <h3 class="newsletter__title">Stay Informed</h3>
+                        <p class="newsletter__description">
+                            Get the latest cybersecurity insights delivered to your inbox
+                        </p>
+                    </div>
+                    <div class="newsletter__form">
+                        <form id="newsletter-form" class="form form--inline">
+                            <input type="email" placeholder="Enter your email" class="input" required>
+                            <button type="submit" class="button button--primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <div class="footer__logo">
+                        <img src="assets/images/logo.svg" alt="Matrica Networks" width="32" height="32">
+                        <span class="neon-text">Matrica Networks</span>
+                    </div>
+                    <p class="footer__description">
+                        Advanced cybersecurity solutions for the digital age. Protecting organizations from evolving cyber threats.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Products</h4>
+                    <ul class="footer__links">
+                        <li><a href="products.html#shell-ide" class="footer__link">Shell IDE</a></li>
+                        <li><a href="products.html#psychy-os" class="footer__link">Psychy OS</a></li>
+                        <li><a href="products.html#sygnil" class="footer__link">Sygnil</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Services</h4>
+                    <ul class="footer__links">
+                        <li><a href="services.html#pentesting" class="footer__link">Penetration Testing</a></li>
+                        <li><a href="services.html#soc" class="footer__link">SOC Services</a></li>
+                        <li><a href="services.html#threat-hunting" class="footer__link">Threat Hunting</a></li>
+                        <li><a href="services.html#dfir" class="footer__link">DFIR</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Company</h4>
+                    <ul class="footer__links">
+                        <li><a href="index.html#about" class="footer__link">About Us</a></li>
+                        <li><a href="contact.html" class="footer__link">Contact</a></li>
+                        <li><a href="portal/login.html" class="footer__link">Employee Portal</a></li>
+                        <li><a href="#" class="footer__link">Careers</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    © 2025 Matrica Networks Pvt Ltd. All rights reserved.
+                </p>
+                <div class="footer__legal">
+                    <a href="#" class="footer__link">Privacy Policy</a>
+                    <a href="#" class="footer__link">Terms of Service</a>
+                    <a href="#" class="footer__link">Security</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        // Blog-specific functionality
+        class BlogManager {
+            constructor() {
+                this.currentTab = 'all';
+                this.currentPage = 1;
+                this.itemsPerPage = 9;
+                this.searchQuery = '';
+                this.sortOrder = 'newest';
+                this.blogs = [];
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadBlogs();
+                this.initMatrixRain();
+            }
+
+            bindEvents() {
+                // Tab switching
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        const tabType = e.target.dataset.tab;
+                        this.switchTab(tabType);
+                    });
+                });
+
+                // Search
+                const searchInput = document.getElementById('blog-search');
+                const searchBtn = document.getElementById('search-btn');
+                
+                searchInput.addEventListener('input', (e) => {
+                    this.searchQuery = e.target.value;
+                    this.debounceSearch();
+                });
+
+                searchBtn.addEventListener('click', () => {
+                    this.performSearch();
+                });
+
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.performSearch();
+                    }
+                });
+
+                // Sort order
+                document.getElementById('sort-order').addEventListener('change', (e) => {
+                    this.sortOrder = e.target.value;
+                    this.renderBlogs();
+                });
+
+                // Newsletter form
+                document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleNewsletterSignup(e);
+                });
+            }
+
+            debounceSearch() {
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(() => {
+                    this.performSearch();
+                }, 300);
+            }
+
+            performSearch() {
+                this.currentPage = 1;
+                this.renderBlogs();
+            }
+
+            switchTab(tabType) {
+                // Update active tab
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('tab--active');
+                });
+                document.querySelector(`[data-tab="${tabType}"]`).classList.add('tab--active');
+
+                this.currentTab = tabType;
+                this.currentPage = 1;
+                this.renderBlogs();
+            }
+
+            async loadBlogs() {
+                try {
+                    this.showLoading(true);
+                    
+                    const response = await fetch('/api/blogs');
+                    if (!response.ok) throw new Error('Failed to fetch blogs');
+                    
+                    const data = await response.json();
+                    this.blogs = data.blogs || [];
+                    
+                    this.renderBlogs();
+                    this.loadFeaturedContent();
+                    
+                } catch (error) {
+                    console.error('Error loading blogs:', error);
+                    this.showError('Failed to load blog content. Please try again later.');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            renderBlogs() {
+                const filteredBlogs = this.filterBlogs();
+                const sortedBlogs = this.sortBlogs(filteredBlogs);
+                const paginatedBlogs = this.paginateBlogs(sortedBlogs);
+
+                if (filteredBlogs.length === 0) {
+                    this.showNoResults(true);
+                    this.renderPagination(0);
+                    return;
+                }
+
+                this.showNoResults(false);
+                this.renderBlogGrid(paginatedBlogs);
+                this.renderPagination(filteredBlogs.length);
+            }
+
+            filterBlogs() {
+                let filtered = this.blogs;
+
+                // Filter by tab
+                if (this.currentTab !== 'all') {
+                    filtered = filtered.filter(blog => blog.type === this.currentTab);
+                }
+
+                // Filter by search
+                if (this.searchQuery.trim()) {
+                    const query = this.searchQuery.toLowerCase();
+                    filtered = filtered.filter(blog => 
+                        blog.title.toLowerCase().includes(query) ||
+                        blog.content.toLowerCase().includes(query) ||
+                        blog.author.toLowerCase().includes(query)
+                    );
+                }
+
+                return filtered;
+            }
+
+            sortBlogs(blogs) {
+                return [...blogs].sort((a, b) => {
+                    switch (this.sortOrder) {
+                        case 'newest':
+                            return new Date(b.created_at) - new Date(a.created_at);
+                        case 'oldest':
+                            return new Date(a.created_at) - new Date(b.created_at);
+                        case 'title':
+                            return a.title.localeCompare(b.title);
+                        default:
+                            return 0;
+                    }
+                });
+            }
+
+            paginateBlogs(blogs) {
+                const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                return blogs.slice(startIndex, startIndex + this.itemsPerPage);
+            }
+
+            renderBlogGrid(blogs) {
+                const grid = document.getElementById('blog-grid');
+                
+                grid.innerHTML = blogs.map(blog => `
+                    <article class="blog-card" data-animation="fade-up">
+                        <div class="blog-card__header">
+                            ${blog.cover_image_path ? `
+                                <img src="${blog.cover_image_path}" alt="${blog.title}" class="blog-card__image">
+                            ` : `
+                                <div class="blog-card__placeholder">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                        <path d="M14.828 14.828a4 4 0 0 1-5.656-5.656"/>
+                                        <circle cx="11" cy="11" r="8"/>
+                                        <path d="M21 21L16.65 16.65"/>
+                                    </svg>
+                                </div>
+                            `}
+                            <div class="blog-card__category">
+                                <span class="badge badge--${blog.type}">${this.formatType(blog.type)}</span>
+                            </div>
+                        </div>
+
+                        <div class="blog-card__content">
+                            <h3 class="blog-card__title">${this.escapeHtml(blog.title)}</h3>
+                            <p class="blog-card__excerpt">${this.getExcerpt(blog.content, 150)}</p>
+                            
+                            <div class="blog-card__meta">
+                                <div class="blog-card__author">
+                                    <span>By ${this.escapeHtml(blog.author)}</span>
+                                </div>
+                                <div class="blog-card__date">
+                                    <time datetime="${blog.created_at}">${this.formatDate(blog.created_at)}</time>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blog-card__footer">
+                            <button class="button button--secondary button--small" onclick="blogManager.viewBlog(${blog.id})">
+                                Read More
+                            </button>
+                            <div class="blog-card__stats">
+                                <span class="blog-card__reading-time">${this.calculateReadingTime(blog.content)} min read</span>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+
+                // Trigger animation
+                setTimeout(() => {
+                    grid.querySelectorAll('[data-animation]').forEach(el => {
+                        el.classList.add('animate');
+                    });
+                }, 100);
+            }
+
+            renderPagination(totalItems) {
+                const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+                const pagination = document.getElementById('pagination');
+
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                let paginationHTML = '<div class="pagination__nav">';
+
+                // Previous button
+                paginationHTML += `
+                    <button class="pagination__btn ${this.currentPage === 1 ? 'pagination__btn--disabled' : ''}"
+                            onclick="blogManager.goToPage(${this.currentPage - 1})"
+                            ${this.currentPage === 1 ? 'disabled' : ''}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"/>
+                        </svg>
+                        Previous
+                    </button>
+                `;
+
+                // Page numbers
+                const startPage = Math.max(1, this.currentPage - 2);
+                const endPage = Math.min(totalPages, this.currentPage + 2);
+
+                if (startPage > 1) {
+                    paginationHTML += `<button class="pagination__btn" onclick="blogManager.goToPage(1)">1</button>`;
+                    if (startPage > 2) {
+                        paginationHTML += '<span class="pagination__ellipsis">...</span>';
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    paginationHTML += `
+                        <button class="pagination__btn ${i === this.currentPage ? 'pagination__btn--active' : ''}"
+                                onclick="blogManager.goToPage(${i})">
+                            ${i}
+                        </button>
+                    `;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        paginationHTML += '<span class="pagination__ellipsis">...</span>';
+                    }
+                    paginationHTML += `<button class="pagination__btn" onclick="blogManager.goToPage(${totalPages})">${totalPages}</button>`;
+                }
+
+                // Next button
+                paginationHTML += `
+                    <button class="pagination__btn ${this.currentPage === totalPages ? 'pagination__btn--disabled' : ''}"
+                            onclick="blogManager.goToPage(${this.currentPage + 1})"
+                            ${this.currentPage === totalPages ? 'disabled' : ''}>
+                        Next
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9,18 15,12 9,6"/>
+                        </svg>
+                    </button>
+                `;
+
+                paginationHTML += '</div>';
+                pagination.innerHTML = paginationHTML;
+            }
+
+            goToPage(page) {
+                if (page >= 1 && page <= Math.ceil(this.filterBlogs().length / this.itemsPerPage)) {
+                    this.currentPage = page;
+                    this.renderBlogs();
+                    
+                    // Scroll to top of blog grid
+                    document.getElementById('blog-grid').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }
+            }
+
+            async loadFeaturedContent() {
+                try {
+                    // Get latest blogs for featured section
+                    const featuredBlogs = this.blogs
+                        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                        .slice(0, 3);
+
+                    const featuredContainer = document.getElementById('featured-content');
+                    
+                    featuredContainer.innerHTML = featuredBlogs.map(blog => `
+                        <div class="featured-card" data-animation="slide-up">
+                            <div class="featured-card__content">
+                                <span class="badge badge--${blog.type}">${this.formatType(blog.type)}</span>
+                                <h3 class="featured-card__title">${this.escapeHtml(blog.title)}</h3>
+                                <p class="featured-card__excerpt">${this.getExcerpt(blog.content, 100)}</p>
+                                <div class="featured-card__meta">
+                                    <span>By ${this.escapeHtml(blog.author)}</span>
+                                    <span>•</span>
+                                    <time>${this.formatDate(blog.created_at)}</time>
+                                </div>
+                                <button class="button button--ghost button--small" onclick="blogManager.viewBlog(${blog.id})">
+                                    Read Article
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Trigger animation
+                    setTimeout(() => {
+                        featuredContainer.querySelectorAll('[data-animation]').forEach(el => {
+                            el.classList.add('animate');
+                        });
+                    }, 500);
+
+                } catch (error) {
+                    console.error('Error loading featured content:', error);
+                }
+            }
+
+            viewBlog(id) {
+                // For now, show alert. In production, this would navigate to a detailed view
+                const blog = this.blogs.find(b => b.id === id);
+                if (blog) {
+                    alert(`Viewing: ${blog.title}\n\nIn a production environment, this would open a detailed blog view page.`);
+                }
+            }
+
+            async handleNewsletterSignup(e) {
+                const form = e.target;
+                const email = form.querySelector('input[type="email"]').value;
+                const button = form.querySelector('button');
+                
+                const originalText = button.textContent;
+                button.textContent = 'Subscribing...';
+                button.disabled = true;
+
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    button.textContent = 'Subscribed!';
+                    button.classList.add('button--success');
+                    form.reset();
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        button.classList.remove('button--success');
+                    }, 2000);
+
+                } catch (error) {
+                    button.textContent = 'Error';
+                    button.classList.add('button--danger');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        button.classList.remove('button--danger');
+                    }, 2000);
+                }
+            }
+
+            showLoading(show) {
+                const loading = document.getElementById('loading');
+                const grid = document.getElementById('blog-grid');
+                
+                if (show) {
+                    loading.style.display = 'flex';
+                    grid.style.display = 'none';
+                } else {
+                    loading.style.display = 'none';
+                    grid.style.display = 'grid';
+                }
+            }
+
+            showNoResults(show) {
+                const noResults = document.getElementById('no-results');
+                const grid = document.getElementById('blog-grid');
+                
+                if (show) {
+                    noResults.style.display = 'block';
+                    grid.style.display = 'none';
+                } else {
+                    noResults.style.display = 'none';
+                    grid.style.display = 'grid';
+                }
+            }
+
+            showError(message) {
+                const grid = document.getElementById('blog-grid');
+                grid.innerHTML = `
+                    <div class="error-state">
+                        <div class="error-state__icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <h3>Error Loading Content</h3>
+                        <p>${message}</p>
+                        <button class="button button--primary" onclick="blogManager.loadBlogs()">Try Again</button>
+                    </div>
+                `;
+            }
+
+            initMatrixRain() {
+                // Initialize matrix rain effect
+                if (typeof MatrixRain !== 'undefined') {
+                    new MatrixRain('matrix-rain');
+                }
+            }
+
+            // Utility functions
+            formatType(type) {
+                const types = {
+                    'blog': 'Blog',
+                    'post': 'Update',
+                    'case': 'Case Study'
+                };
+                return types[type] || type;
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+
+            getExcerpt(content, maxLength) {
+                if (content.length <= maxLength) return content;
+                return content.substring(0, maxLength).trim() + '...';
+            }
+
+            calculateReadingTime(content) {
+                const wordsPerMinute = 200;
+                const words = content.split(' ').length;
+                return Math.ceil(words / wordsPerMinute);
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Global functions
+        function clearFilters() {
+            document.getElementById('blog-search').value = '';
+            document.getElementById('sort-order').value = 'newest';
+            blogManager.searchQuery = '';
+            blogManager.sortOrder = 'newest';
+            blogManager.currentPage = 1;
+            blogManager.switchTab('all');
+        }
+
+        // Initialize when page loads
+        let blogManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            blogManager = new BlogManager();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Matrica Networks Pvt Ltd</title>
+    <meta name="description" content="Discover Matrica Networks' innovative cybersecurity products: Shell IDE, Psychy OS, and Sygnil - advanced solutions for modern security challenges.">
+    <meta name="keywords" content="cybersecurity products, Shell IDE, Psychy OS, Sygnil, security tools, penetration testing">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/neon.css">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <img src="assets/images/logo.svg" alt="Matrica Networks" class="logo-icon">
+                    <span>MATRICA NETWORKS</span>
+                </a>
+                
+                <nav class="nav">
+                    <ul class="nav-menu" id="nav-menu">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/products.html" class="nav-link active">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/services.html" class="nav-link">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/blog.html" class="nav-link">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/careers.html" class="nav-link">Careers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/contact.html" class="nav-link">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/portal/login.html" class="nav-link btn btn-primary btn-sm">Portal</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21 12.79a9 9 0 1 1-6.21-6.21 7 7 0 0 0 6.21 6.21z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero cyber-grid" style="min-height: 60vh;">
+            <div class="hero-content">
+                <h1 class="hero-title" style="font-size: 3rem;">
+                    <span class="gradient-neon-text">Security Products</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Advanced cybersecurity tools engineered for the modern threat landscape<br>
+                    Empowering security professionals with cutting-edge technology
+                </p>
+            </div>
+        </section>
+
+        <!-- Products Overview -->
+        <section class="section" id="products-overview">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title neon-text-static">Our Product Portfolio</h2>
+                    <p class="section-description">
+                        Matrica Networks develops innovative cybersecurity products that combine advanced 
+                        technology with intuitive design, empowering organizations to defend against 
+                        sophisticated cyber threats.
+                    </p>
+                </div>
+                
+                <div class="grid-section grid-3">
+                    <!-- Shell IDE -->
+                    <div class="card card-product hover-glow" id="shell-ide">
+                        <div class="card-header">
+                            <div class="product-icon neon-text text-6xl">💻</div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-2xl mb-4 neon-text-static">Shell IDE</h3>
+                            <p class="text-secondary mb-6">
+                                Advanced Integrated Development Environment designed specifically for 
+                                cybersecurity professionals, penetration testers, and security researchers.
+                            </p>
+                            
+                            <div class="mb-6">
+                                <h4 class="text-accent mb-3">Key Features</h4>
+                                <ul class="text-sm text-secondary space-y-1">
+                                    <li>• Advanced syntax highlighting for security scripts</li>
+                                    <li>• Integrated vulnerability assessment tools</li>
+                                    <li>• Built-in terminal with security-focused commands</li>
+                                    <li>• Plugin ecosystem for security frameworks</li>
+                                    <li>• Real-time collaboration for security teams</li>
+                                    <li>• Encrypted project storage and version control</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-primary">Penetration Testing</span>
+                                    <span class="badge badge-secondary">Code Analysis</span>
+                                    <span class="badge badge-success">Team Collaboration</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="flex justify-between items-center w-full">
+                                <div>
+                                    <div class="text-sm text-muted">Starting at</div>
+                                    <div class="text-xl font-bold text-accent">$299<span class="text-sm">/user/month</span></div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="#" class="btn btn-secondary btn-sm">Learn More</a>
+                                    <a href="/contact.html?product=shell-ide" class="btn btn-primary btn-sm">Request Demo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Psychy OS -->
+                    <div class="card card-product hover-glow" id="psychy-os">
+                        <div class="card-header">
+                            <div class="product-icon neon-text-green text-6xl">🧠</div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-2xl mb-4 neon-text-green">Psychy OS</h3>
+                            <p class="text-secondary mb-6">
+                                Revolutionary operating system built from the ground up with security 
+                                as the core principle. Designed for high-security environments and 
+                                sensitive operations.
+                            </p>
+                            
+                            <div class="mb-6">
+                                <h4 class="text-accent mb-3">Key Features</h4>
+                                <ul class="text-sm text-secondary space-y-1">
+                                    <li>• Quantum-resistant encryption at the kernel level</li>
+                                    <li>• Zero-trust architecture implementation</li>
+                                    <li>• Hardware-based attestation and verification</li>
+                                    <li>• Advanced sandboxing and isolation</li>
+                                    <li>• Real-time threat detection and response</li>
+                                    <li>• Secure boot chain with TPM integration</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-success">Zero Trust</span>
+                                    <span class="badge badge-warning">Quantum Safe</span>
+                                    <span class="badge badge-primary">Enterprise Ready</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="flex justify-between items-center w-full">
+                                <div>
+                                    <div class="text-sm text-muted">Enterprise License</div>
+                                    <div class="text-xl font-bold text-accent">$1,999<span class="text-sm">/device/year</span></div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="#" class="btn btn-secondary btn-sm">Learn More</a>
+                                    <a href="/contact.html?product=psychy-os" class="btn btn-primary btn-sm">Request Demo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sygnil -->
+                    <div class="card card-product hover-glow" id="sygnil">
+                        <div class="card-header">
+                            <div class="product-icon neon-text-pink text-6xl">📡</div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-2xl mb-4 neon-text-pink">Sygnil</h3>
+                            <p class="text-secondary mb-6">
+                                Advanced Signal Intelligence and Network Analysis platform providing 
+                                comprehensive visibility into network traffic, communications, and 
+                                potential security threats.
+                            </p>
+                            
+                            <div class="mb-6">
+                                <h4 class="text-accent mb-3">Key Features</h4>
+                                <ul class="text-sm text-secondary space-y-1">
+                                    <li>• Deep packet inspection and analysis</li>
+                                    <li>• Machine learning-based anomaly detection</li>
+                                    <li>• Real-time network visualization</li>
+                                    <li>• Encrypted traffic analysis capabilities</li>
+                                    <li>• Integration with threat intelligence feeds</li>
+                                    <li>• Automated incident response workflows</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-danger">SIGINT</span>
+                                    <span class="badge badge-warning">ML Detection</span>
+                                    <span class="badge badge-primary">Network Analysis</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="flex justify-between items-center w-full">
+                                <div>
+                                    <div class="text-sm text-muted">Professional License</div>
+                                    <div class="text-xl font-bold text-accent">$4,999<span class="text-sm">/month</span></div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="#" class="btn btn-secondary btn-sm">Learn More</a>
+                                    <a href="/contact.html?product=sygnil" class="btn btn-primary btn-sm">Request Demo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Comparison -->
+        <section class="section bg-secondary" id="comparison">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Product Comparison</h2>
+                    <p class="section-description">
+                        Choose the right solution for your organization's specific security needs.
+                    </p>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th class="text-center">Shell IDE</th>
+                                <th class="text-center">Psychy OS</th>
+                                <th class="text-center">Sygnil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Primary Use Case</strong></td>
+                                <td class="text-center">Development & Testing</td>
+                                <td class="text-center">Secure Computing</td>
+                                <td class="text-center">Network Intelligence</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Target Users</strong></td>
+                                <td class="text-center">Security Engineers</td>
+                                <td class="text-center">Enterprise Users</td>
+                                <td class="text-center">SOC Analysts</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Deployment</strong></td>
+                                <td class="text-center">
+                                    <span class="badge badge-primary">Cloud/On-Premise</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge badge-success">Hardware/VM</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge badge-warning">Network Appliance</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Integration APIs</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>24/7 Support</strong></td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                                <td class="text-center">✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Training Included</strong></td>
+                                <td class="text-center">Basic</td>
+                                <td class="text-center">Advanced</td>
+                                <td class="text-center">Comprehensive</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Specifications -->
+        <section class="section" id="specifications">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Technical Specifications</h2>
+                    <p class="section-description">
+                        Detailed technical requirements and capabilities for each product.
+                    </p>
+                </div>
+                
+                <div class="tabs" id="spec-tabs">
+                    <ul class="tab-list">
+                        <li><button class="tab-button active" data-tab="shell-ide-spec">Shell IDE</button></li>
+                        <li><button class="tab-button" data-tab="psychy-os-spec">Psychy OS</button></li>
+                        <li><button class="tab-button" data-tab="sygnil-spec">Sygnil</button></li>
+                    </ul>
+                </div>
+                
+                <div class="tab-content active" id="shell-ide-spec">
+                    <div class="grid-section grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">System Requirements</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="space-y-2 text-sm">
+                                    <li><strong>OS:</strong> Windows 10+, macOS 10.15+, Linux (Ubuntu 18.04+)</li>
+                                    <li><strong>RAM:</strong> 8GB minimum, 16GB recommended</li>
+                                    <li><strong>Storage:</strong> 10GB free space</li>
+                                    <li><strong>Network:</strong> Internet connection required</li>
+                                    <li><strong>Display:</strong> 1920x1080 minimum resolution</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Supported Languages</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-secondary">Python</span>
+                                    <span class="badge badge-secondary">Bash</span>
+                                    <span class="badge badge-secondary">PowerShell</span>
+                                    <span class="badge badge-secondary">JavaScript</span>
+                                    <span class="badge badge-secondary">Ruby</span>
+                                    <span class="badge badge-secondary">Go</span>
+                                    <span class="badge badge-secondary">Rust</span>
+                                    <span class="badge badge-secondary">C/C++</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="psychy-os-spec">
+                    <div class="grid-section grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Hardware Requirements</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="space-y-2 text-sm">
+                                    <li><strong>CPU:</strong> Intel Core i7 or AMD Ryzen 7 (latest gen)</li>
+                                    <li><strong>RAM:</strong> 32GB minimum, 64GB recommended</li>
+                                    <li><strong>Storage:</strong> 1TB NVMe SSD with encryption</li>
+                                    <li><strong>TPM:</strong> TPM 2.0 chip required</li>
+                                    <li><strong>Network:</strong> Gigabit Ethernet minimum</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Security Features</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="space-y-2 text-sm">
+                                    <li>• Hardware-based root of trust</li>
+                                    <li>• Quantum-resistant cryptography</li>
+                                    <li>• Mandatory access controls</li>
+                                    <li>• Real-time kernel protection</li>
+                                    <li>• Secure container runtime</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="sygnil-spec">
+                    <div class="grid-section grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Network Capacity</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="space-y-2 text-sm">
+                                    <li><strong>Throughput:</strong> Up to 100Gbps</li>
+                                    <li><strong>Connections:</strong> 10M+ concurrent</li>
+                                    <li><strong>Protocols:</strong> All major network protocols</li>
+                                    <li><strong>Storage:</strong> 10TB+ packet retention</li>
+                                    <li><strong>Analysis:</strong> Real-time processing</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Detection Capabilities</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="space-y-2 text-sm">
+                                    <li>• Advanced persistent threats (APT)</li>
+                                    <li>• Zero-day exploit detection</li>
+                                    <li>• Encrypted malware analysis</li>
+                                    <li>• Behavioral anomaly detection</li>
+                                    <li>• IoC correlation and enrichment</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section" id="product-cta">
+            <div class="container">
+                <div class="card card-neon">
+                    <div class="card-body p-8 text-center">
+                        <h2 class="text-3xl mb-4 gradient-neon-text">Ready to Experience Our Products?</h2>
+                        <p class="text-lg text-secondary mb-8 max-w-2xl mx-auto">
+                            Schedule a personalized demo with our security experts and discover how 
+                            Matrica Networks' products can enhance your organization's security posture.
+                        </p>
+                        
+                        <div class="flex justify-center gap-4 flex-wrap">
+                            <a href="/contact.html?intent=demo" class="btn btn-neon btn-lg">
+                                Schedule Demo
+                            </a>
+                            <a href="/services.html" class="btn btn-secondary btn-lg">
+                                Explore Services
+                            </a>
+                        </div>
+                        
+                        <div class="mt-8 text-sm text-muted">
+                            All products include comprehensive training, 24/7 support, and regular security updates.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/products.html">Products</a></li>
+                            <li><a href="/services.html">Services</a></li>
+                            <li><a href="/blog.html">Blog</a></li>
+                            <li><a href="/contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Products</h4>
+                        <ul>
+                            <li><a href="#shell-ide">Shell IDE</a></li>
+                            <li><a href="#psychy-os">Psychy OS</a></li>
+                            <li><a href="#sygnil">Sygnil</a></li>
+                            <li><a href="/contact.html?intent=demo">Request Demo</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="/portal/login.html">Client Portal</a></li>
+                            <li><a href="/contact.html">Support Center</a></li>
+                            <li><a href="/contact.html">Emergency Response</a></li>
+                            <li><a href="/blog.html">Knowledge Base</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#" class="social-link">LinkedIn</a></li>
+                            <li><a href="#" class="social-link">Twitter</a></li>
+                            <li><a href="#" class="social-link">GitHub</a></li>
+                            <li><a href="/contact.html">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        © 2024 Matrica Networks Pvt Ltd. All rights reserved.
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="LinkedIn">📊</a>
+                        <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+                        <a href="#" class="social-link" aria-label="GitHub">💻</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/ui.js"></script>
+    
+    <!-- Tab functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and target content
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

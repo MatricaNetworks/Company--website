@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Matrica Networks</title>
+    <meta name="description" content="Join our elite cybersecurity team. Explore career opportunities at Matrica Networks.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/layout.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/neon.css">
+    
+    <!-- SEO & Social Meta -->
+    <meta property="og:title" content="Careers - Matrica Networks">
+    <meta property="og:description" content="Join our elite cybersecurity team. Explore career opportunities at Matrica Networks.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+</head>
+<body class="dark">
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-canvas" class="matrix-bg"></canvas>
+    
+    <!-- Header -->
+    <header class="header fixed glass">
+        <div class="container">
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <img src="/assets/images/logo.svg" alt="Matrica Networks" class="logo">
+                    <span class="brand-text neon-blue">Matrica Networks</span>
+                </div>
+                
+                <ul class="navbar-nav desktop-nav">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/products.html" class="nav-link">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/services.html" class="nav-link">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/blog.html" class="nav-link">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/careers.html" class="nav-link active">Careers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/contact.html" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-actions">
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21 12.79a9 9 0 1 1-6.21-6.21 7 7 0 0 0 6.21 6.21z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button class="btn btn-outline-neon btn-sm" onclick="window.location.href='/portal/login.html'">
+                        <span class="icon">🔐</span>
+                        Employee Portal
+                    </button>
+                    
+                    <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- Mobile Navigation -->
+            <div class="mobile-nav" id="mobile-nav">
+                <ul class="mobile-nav-links">
+                    <li><a href="/" class="mobile-nav-link">Home</a></li>
+                    <li><a href="/products.html" class="mobile-nav-link">Products</a></li>
+                    <li><a href="/services.html" class="mobile-nav-link">Services</a></li>
+                    <li><a href="/blog.html" class="mobile-nav-link">Blog</a></li>
+                    <li><a href="/careers.html" class="mobile-nav-link active">Careers</a></li>
+                    <li><a href="/contact.html" class="mobile-nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero hero-sm">
+            <div class="container">
+                <div class="hero-content text-center">
+                    <h1 class="hero-title glow-text">
+                        <span class="neon-green">Join Our</span><br>
+                        Elite Team
+                    </h1>
+                    <p class="hero-subtitle">
+                        Build the future of cybersecurity with passionate professionals<br>
+                        defending digital assets worldwide
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number neon-blue" data-target="500">0</span>
+                            <span class="stat-label">Threats Blocked Daily</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number neon-green" data-target="50">0</span>
+                            <span class="stat-label">Security Experts</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number neon-purple" data-target="99.9">0</span>
+                            <span class="stat-label">Uptime Guarantee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Join Us Section -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header text-center">
+                    <h2 class="section-title">Why Matrica Networks?</h2>
+                    <p class="section-subtitle">Experience cybersecurity excellence with industry-leading benefits</p>
+                </div>
+                
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon neon-blue">💰</div>
+                        <h3 class="feature-title">Competitive Compensation</h3>
+                        <p class="feature-description">Industry-leading salaries, performance bonuses, and comprehensive benefits package including health, dental, and retirement plans.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon neon-green">🎓</div>
+                        <h3 class="feature-title">Professional Growth</h3>
+                        <p class="feature-description">Certification reimbursement, conference attendance, training programs, and mentorship opportunities to advance your career.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon neon-purple">🏠</div>
+                        <h3 class="feature-title">Work-Life Balance</h3>
+                        <p class="feature-description">Flexible work arrangements, remote options, unlimited PTO, and a culture that values personal well-being.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Filters -->
+        <section class="section">
+            <div class="container">
+                <div class="filters-container">
+                    <div class="filters-header">
+                        <h2 class="section-title">Open Positions</h2>
+                        <div class="results-count">
+                            <span id="job-count" class="neon-blue">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Department</label>
+                            <select id="department-filter" class="filter-select">
+                                <option value="">All Departments</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Location</label>
+                            <select id="location-filter" class="filter-select">
+                                <option value="">All Locations</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Job Type</label>
+                            <select id="job-type-filter" class="filter-select">
+                                <option value="">All Types</option>
+                                <option value="full-time">Full-Time</option>
+                                <option value="part-time">Part-Time</option>
+                                <option value="contract">Contract</option>
+                                <option value="remote">Remote</option>
+                                <option value="hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Experience</label>
+                            <select id="experience-filter" class="filter-select">
+                                <option value="">All Levels</option>
+                                <option value="entry">Entry Level</option>
+                                <option value="mid">Mid Level</option>
+                                <option value="senior">Senior Level</option>
+                                <option value="lead">Lead</option>
+                                <option value="executive">Executive</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Listings -->
+        <section class="section">
+            <div class="container">
+                <div id="jobs-container" class="jobs-grid">
+                    <!-- Jobs will be loaded here -->
+                </div>
+                
+                <div id="no-jobs" class="no-jobs" style="display: none;">
+                    <div class="no-jobs-content">
+                        <h3>No positions found</h3>
+                        <p>Try adjusting your filters or check back later for new opportunities.</p>
+                    </div>
+                </div>
+                
+                <div id="loading-jobs" class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading career opportunities...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Join Our Mission Section -->
+        <section class="section bg-dark">
+            <div class="container">
+                <div class="cta-content text-center">
+                    <h2 class="cta-title">Ready to Defend the Digital World?</h2>
+                    <p class="cta-subtitle">
+                        Join Matrica Networks and be part of an elite team protecting organizations from cyber threats.
+                    </p>
+                    <div class="cta-actions">
+                        <a href="#jobs-container" class="btn btn-primary btn-lg">View Open Positions</a>
+                        <a href="/contact.html" class="btn btn-outline-neon btn-lg">Get in Touch</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <img src="/assets/images/logo.svg" alt="Matrica Networks" class="footer-logo">
+                        <span class="footer-brand-text neon-blue">Matrica Networks</span>
+                    </div>
+                    <p class="footer-description">
+                        Leading cybersecurity solutions provider, protecting digital assets with advanced threat detection and response capabilities.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Solutions</h3>
+                    <ul class="footer-links">
+                        <li><a href="/products.html">Shell IDE</a></li>
+                        <li><a href="/products.html">Psychy OS</a></li>
+                        <li><a href="/products.html">Sygnil</a></li>
+                        <li><a href="/services.html">Consulting</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="/services.html">Penetration Testing</a></li>
+                        <li><a href="/services.html">SOC Services</a></li>
+                        <li><a href="/services.html">Threat Hunting</a></li>
+                        <li><a href="/services.html">DFIR</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">About Us</a></li>
+                        <li><a href="/careers.html">Careers</a></li>
+                        <li><a href="/blog.html">Blog</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-info">
+                    <p>&copy; 2024 Matrica Networks Pvt Ltd. All rights reserved.</p>
+                    <p>Securing the digital frontier, one byte at a time.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Job Detail Modal -->
+    <div id="job-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-job-title" class="modal-title"></h3>
+                <button class="modal-close" onclick="closeJobModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="job-meta">
+                    <span id="modal-department" class="job-badge"></span>
+                    <span id="modal-location" class="job-badge"></span>
+                    <span id="modal-job-type" class="job-badge"></span>
+                    <span id="modal-experience" class="job-badge"></span>
+                </div>
+                <div id="modal-salary" class="job-salary"></div>
+                
+                <div class="job-section">
+                    <h4>Description</h4>
+                    <div id="modal-description" class="job-content"></div>
+                </div>
+                
+                <div class="job-section">
+                    <h4>Requirements</h4>
+                    <div id="modal-requirements" class="job-content"></div>
+                </div>
+                
+                <div class="job-section">
+                    <h4>Responsibilities</h4>
+                    <div id="modal-responsibilities" class="job-content"></div>
+                </div>
+                
+                <div class="job-section">
+                    <h4>Benefits</h4>
+                    <div id="modal-benefits" class="job-content"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-lg" onclick="applyForJob()">Apply Now</button>
+                <button class="btn btn-outline-neon" onclick="closeJobModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/ui.js"></script>
+    
+    <script>
+    // Careers page specific functionality
+    let currentJobs = [];
+    let allFilters = {};
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        loadJobs();
+        setupFilterListeners();
+        startCounters();
+    });
+
+    function loadJobs() {
+        const loadingElement = document.getElementById('loading-jobs');
+        const jobsContainer = document.getElementById('jobs-container');
+        const noJobsElement = document.getElementById('no-jobs');
+        
+        loadingElement.style.display = 'block';
+        jobsContainer.style.display = 'none';
+        noJobsElement.style.display = 'none';
+        
+        // Get filter values
+        const params = new URLSearchParams();
+        const department = document.getElementById('department-filter').value;
+        const location = document.getElementById('location-filter').value;
+        const jobType = document.getElementById('job-type-filter').value;
+        const experience = document.getElementById('experience-filter').value;
+        
+        if (department) params.append('department', department);
+        if (location) params.append('location', location);
+        if (jobType) params.append('job_type', jobType);
+        if (experience) params.append('experience_level', experience);
+        
+        const url = `/api/jobs${params.toString() ? '?' + params.toString() : ''}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    currentJobs = data.jobs;
+                    allFilters = data.filters;
+                    
+                    updateFilterOptions();
+                    displayJobs(data.jobs);
+                    updateJobCount(data.jobs.length);
+                } else {
+                    console.error('Failed to load jobs:', data.error);
+                    showNoJobs();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading jobs:', error);
+                showNoJobs();
+            })
+            .finally(() => {
+                loadingElement.style.display = 'none';
+            });
+    }
+
+    function displayJobs(jobs) {
+        const container = document.getElementById('jobs-container');
+        const noJobsElement = document.getElementById('no-jobs');
+        
+        if (jobs.length === 0) {
+            showNoJobs();
+            return;
+        }
+        
+        container.innerHTML = jobs.map(job => `
+            <div class="job-card" onclick="showJobDetail(${job.id})">
+                <div class="job-header">
+                    <h3 class="job-title">${escapeHtml(job.title)}</h3>
+                    <div class="job-meta">
+                        <span class="job-badge job-department">${escapeHtml(job.department)}</span>
+                        <span class="job-badge job-location">${escapeHtml(job.location)}</span>
+                    </div>
+                </div>
+                
+                <div class="job-body">
+                    <p class="job-description">${escapeHtml(job.description?.substring(0, 150) || '')}...</p>
+                    
+                    <div class="job-details">
+                        <div class="job-badges">
+                            <span class="job-badge job-type">${formatJobType(job.job_type)}</span>
+                            <span class="job-badge job-level">${formatExperienceLevel(job.experience_level)}</span>
+                        </div>
+                        ${job.salary_min && job.salary_max ? `
+                            <div class="job-salary">
+                                $${formatSalary(job.salary_min)} - $${formatSalary(job.salary_max)}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <div class="job-footer">
+                    <span class="job-posted">Posted ${formatDate(job.published_at)}</span>
+                    <span class="job-apply-btn">View Details →</span>
+                </div>
+            </div>
+        `).join('');
+        
+        container.style.display = 'grid';
+        noJobsElement.style.display = 'none';
+    }
+
+    function showNoJobs() {
+        document.getElementById('jobs-container').style.display = 'none';
+        document.getElementById('no-jobs').style.display = 'block';
+    }
+
+    function updateFilterOptions() {
+        // Update department filter
+        const departmentFilter = document.getElementById('department-filter');
+        const currentDept = departmentFilter.value;
+        departmentFilter.innerHTML = '<option value="">All Departments</option>' +
+            allFilters.departments.map(dept => 
+                `<option value="${escapeHtml(dept)}" ${dept === currentDept ? 'selected' : ''}>${escapeHtml(dept)}</option>`
+            ).join('');
+        
+        // Update location filter
+        const locationFilter = document.getElementById('location-filter');
+        const currentLoc = locationFilter.value;
+        locationFilter.innerHTML = '<option value="">All Locations</option>' +
+            allFilters.locations.map(loc => 
+                `<option value="${escapeHtml(loc)}" ${loc === currentLoc ? 'selected' : ''}>${escapeHtml(loc)}</option>`
+            ).join('');
+    }
+
+    function setupFilterListeners() {
+        document.getElementById('department-filter').addEventListener('change', loadJobs);
+        document.getElementById('location-filter').addEventListener('change', loadJobs);
+        document.getElementById('job-type-filter').addEventListener('change', loadJobs);
+        document.getElementById('experience-filter').addEventListener('change', loadJobs);
+    }
+
+    function clearFilters() {
+        document.getElementById('department-filter').value = '';
+        document.getElementById('location-filter').value = '';
+        document.getElementById('job-type-filter').value = '';
+        document.getElementById('experience-filter').value = '';
+        loadJobs();
+    }
+
+    function showJobDetail(jobId) {
+        const job = currentJobs.find(j => j.id === jobId);
+        if (!job) return;
+        
+        document.getElementById('modal-job-title').textContent = job.title;
+        document.getElementById('modal-department').textContent = job.department;
+        document.getElementById('modal-location').textContent = job.location;
+        document.getElementById('modal-job-type').textContent = formatJobType(job.job_type);
+        document.getElementById('modal-experience').textContent = formatExperienceLevel(job.experience_level);
+        
+        if (job.salary_min && job.salary_max) {
+            document.getElementById('modal-salary').innerHTML = `
+                <strong>Salary Range:</strong> $${formatSalary(job.salary_min)} - $${formatSalary(job.salary_max)}
+            `;
+        } else {
+            document.getElementById('modal-salary').innerHTML = '';
+        }
+        
+        document.getElementById('modal-description').innerHTML = formatText(job.description || '');
+        document.getElementById('modal-requirements').innerHTML = formatText(job.requirements || '');
+        document.getElementById('modal-responsibilities').innerHTML = formatText(job.responsibilities || '');
+        document.getElementById('modal-benefits').innerHTML = formatText(job.benefits || '');
+        
+        document.getElementById('job-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeJobModal() {
+        document.getElementById('job-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function applyForJob() {
+        // Redirect to contact page with pre-filled subject
+        const jobTitle = document.getElementById('modal-job-title').textContent;
+        const contactUrl = `/contact.html?subject=Application for ${encodeURIComponent(jobTitle)}`;
+        window.location.href = contactUrl;
+    }
+
+    function updateJobCount(count) {
+        document.getElementById('job-count').textContent = `${count} open position${count !== 1 ? 's' : ''}`;
+    }
+
+    // Utility functions
+    function formatJobType(type) {
+        return type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
+    }
+
+    function formatExperienceLevel(level) {
+        return level.charAt(0).toUpperCase() + level.slice(1) + ' Level';
+    }
+
+    function formatSalary(amount) {
+        return new Intl.NumberFormat('en-US').format(amount);
+    }
+
+    function formatText(text) {
+        if (!text) return 'Not specified';
+        return text.split('\n').map(line => `<p>${escapeHtml(line)}</p>`).join('');
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return 'Recently';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) return '1 day ago';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        if (diffDays < 30) return `${Math.ceil(diffDays / 7)} week${Math.ceil(diffDays / 7) !== 1 ? 's' : ''} ago`;
+        return `${Math.ceil(diffDays / 30)} month${Math.ceil(diffDays / 30) !== 1 ? 's' : ''} ago`;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function startCounters() {
+        const counters = document.querySelectorAll('.stat-number');
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            const increment = target / 100;
+            let current = 0;
+            
+            const updateCounter = () => {
+                if (current < target) {
+                    current += increment;
+                    counter.textContent = Math.ceil(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target;
+                }
+            };
+            
+            updateCounter();
+        });
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('job-modal');
+        if (event.target === modal) {
+            closeJobModal();
+        }
+    }
+    </script>
+</body>
+</html>

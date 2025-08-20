@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrica Networks Pvt Ltd - Cybersecurity Solutions</title>
+    <meta name="description" content="Leading cybersecurity company providing comprehensive security solutions, penetration testing, SOC services, and advanced threat protection.">
+    <meta name="keywords" content="cybersecurity, penetration testing, SOC, threat hunting, DFIR, cloud security, zero trust">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/neon.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/js/webgl/shaders.js" as="script">
+    <link rel="preload" href="assets/js/webgl/globe.js" as="script">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <img src="assets/images/logo.svg" alt="Matrica Networks" class="logo-icon">
+                    <span>MATRICA NETWORKS</span>
+                </a>
+                
+                <nav class="nav">
+                    <ul class="nav-menu" id="nav-menu">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link active">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/products.html" class="nav-link">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/services.html" class="nav-link">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/blog.html" class="nav-link">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/careers.html" class="nav-link">Careers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/contact.html" class="nav-link">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/portal/login.html" class="nav-link btn btn-primary btn-sm">Portal</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                        <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21 12.79a9 9 0 1 1-6.21-6.21 7 7 0 0 0 6.21 6.21z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section with WebGL Globe -->
+        <section class="hero cyber-grid" id="hero">
+            <div class="hero-content">
+                <h1 class="hero-title neon-text" data-text="MATRICA NETWORKS">
+                    MATRICA NETWORKS
+                </h1>
+                <p class="hero-subtitle">
+                    Next-Generation Cybersecurity Solutions<br>
+                    Protecting Digital Assets in an Evolving Threat Landscape
+                </p>
+                
+                <!-- WebGL Canvas -->
+                <canvas id="webgl-globe" class="webgl-canvas" width="400" height="400"></canvas>
+                
+                <div class="flex justify-center gap-4 flex-wrap">
+                    <a href="/services.html" class="btn btn-primary btn-lg">
+                        Explore Services
+                    </a>
+                    <a href="/contact.html" class="btn btn-secondary btn-lg">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Matrix Rain Effect -->
+            <div class="matrix-rain" id="matrix-rain"></div>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="section" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title neon-text-static">About Matrica Networks</h2>
+                    <p class="section-description">
+                        At the forefront of cybersecurity innovation, we deliver comprehensive security solutions 
+                        that protect organizations from evolving digital threats.
+                    </p>
+                </div>
+                
+                <div class="grid-section grid-2">
+                    <div class="card card-neon hover-glow">
+                        <div class="card-header">
+                            <h3 class="card-title">Who We Are</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                Matrica Networks Pvt Ltd is a leading cybersecurity company dedicated to providing 
+                                cutting-edge security solutions for businesses of all sizes. Founded by security 
+                                experts with decades of combined experience, we understand the complex challenges 
+                                organizations face in today's digital landscape.
+                            </p>
+                            <p>
+                                Our team of certified security professionals leverages advanced technologies and 
+                                proven methodologies to deliver comprehensive protection against sophisticated 
+                                cyber threats. We pride ourselves on our proactive approach to cybersecurity, 
+                                ensuring our clients stay ahead of emerging risks.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-neon hover-glow">
+                        <div class="card-header">
+                            <h3 class="card-title">Our Expertise</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="grid gap-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="status-online">Advanced Threat Detection</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="status-online">Security Architecture Design</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="status-online">Incident Response & Forensics</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="status-online">Compliance & Risk Management</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="status-online">Cloud Security Solutions</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="status-online">Zero Trust Implementation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="section bg-secondary" id="mission">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Our Mission</h2>
+                </div>
+                
+                <div class="card card-neon">
+                    <div class="card-body p-8">
+                        <div class="text-center">
+                            <div class="neon-text-green text-6xl mb-6">🛡️</div>
+                            <h3 class="text-2xl mb-6 gradient-neon-text">
+                                Empowering Organizations Through Cybersecurity Excellence
+                            </h3>
+                            <p class="text-lg text-secondary mb-6 max-w-4xl mx-auto">
+                                Our mission is to provide world-class cybersecurity solutions that enable organizations 
+                                to operate securely and confidently in the digital age. We are committed to:
+                            </p>
+                            
+                            <div class="grid-section grid-3 text-left">
+                                <div class="card bg-tertiary">
+                                    <div class="card-body">
+                                        <h4 class="text-accent mb-4">🔒 Protecting Assets</h4>
+                                        <p class="text-sm">
+                                            Safeguarding critical digital assets, sensitive data, and business 
+                                            operations through comprehensive security measures and continuous monitoring.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card bg-tertiary">
+                                    <div class="card-body">
+                                        <h4 class="text-accent mb-4">⚡ Enabling Innovation</h4>
+                                        <p class="text-sm">
+                                            Providing security frameworks that support business growth and digital 
+                                            transformation while maintaining the highest levels of protection.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card bg-tertiary">
+                                    <div class="card-body">
+                                        <h4 class="text-accent mb-4">🚀 Advancing Security</h4>
+                                        <p class="text-sm">
+                                            Continuously evolving our capabilities and staying ahead of emerging 
+                                            threats through research, innovation, and industry collaboration.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section class="section" id="vision">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Our Vision</h2>
+                </div>
+                
+                <div class="card card-neon hologram">
+                    <div class="card-body p-8">
+                        <div class="text-center">
+                            <div class="neon-text-pink text-6xl mb-6">🌐</div>
+                            <h3 class="text-2xl mb-6 gradient-neon-text">
+                                A Secure Digital Future for All
+                            </h3>
+                            <p class="text-lg text-secondary mb-8 max-w-4xl mx-auto">
+                                We envision a world where organizations can harness the full potential of digital 
+                                technologies without compromising security. Our vision encompasses:
+                            </p>
+                            
+                            <div class="grid-section grid-2">
+                                <div class="data-stream card bg-tertiary neon-border-static">
+                                    <div class="card-body">
+                                        <h4 class="text-neon-blue mb-4 text-xl">🏢 Enterprise Security</h4>
+                                        <p class="mb-4">
+                                            Every organization, from startups to Fortune 500 companies, equipped 
+                                            with enterprise-grade cybersecurity solutions tailored to their unique needs.
+                                        </p>
+                                        <ul class="text-left text-sm space-y-2">
+                                            <li>• Adaptive security architectures</li>
+                                            <li>• AI-powered threat detection</li>
+                                            <li>• Automated incident response</li>
+                                            <li>• Continuous compliance monitoring</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="scan-lines card bg-tertiary neon-border-static">
+                                    <div class="card-body">
+                                        <h4 class="text-neon-green mb-4 text-xl">🌍 Global Resilience</h4>
+                                        <p class="mb-4">
+                                            A interconnected global infrastructure where cyber resilience is 
+                                            built into the foundation of digital transformation initiatives.
+                                        </p>
+                                        <ul class="text-left text-sm space-y-2">
+                                            <li>• International security standards</li>
+                                            <li>• Cross-border threat intelligence</li>
+                                            <li>• Collaborative defense strategies</li>
+                                            <li>• Shared security expertise</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <blockquote class="text-lg italic text-accent border-l-4 border-neon-blue pl-6">
+                                    "Security is not just about protecting what exists today, but enabling 
+                                    what's possible tomorrow. We're building the foundation for a secure digital future."
+                                </blockquote>
+                                <cite class="text-muted text-sm mt-4 block">— Matrica Networks Leadership Team</cite>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Values Section -->
+        <section class="section bg-secondary" id="values">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Core Values</h2>
+                    <p class="section-description">
+                        The principles that guide every decision we make and every solution we deliver.
+                    </p>
+                </div>
+                
+                <div class="grid-section grid-4">
+                    <div class="card hover-glow">
+                        <div class="card-body text-center">
+                            <div class="text-4xl mb-4 neon-text">🔐</div>
+                            <h3 class="card-title text-lg">Security First</h3>
+                            <p class="text-sm text-secondary">
+                                Every solution designed with security as the primary consideration, 
+                                never as an afterthought.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card hover-glow">
+                        <div class="card-body text-center">
+                            <div class="text-4xl mb-4 neon-text-green">🚀</div>
+                            <h3 class="card-title text-lg">Innovation</h3>
+                            <p class="text-sm text-secondary">
+                                Continuously pushing boundaries to stay ahead of evolving threats 
+                                and emerging technologies.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card hover-glow">
+                        <div class="card-body text-center">
+                            <div class="text-4xl mb-4 neon-text-pink">🤝</div>
+                            <h3 class="card-title text-lg">Partnership</h3>
+                            <p class="text-sm text-secondary">
+                                Building lasting relationships with clients through trust, 
+                                transparency, and exceptional service.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card hover-glow">
+                        <div class="card-body text-center">
+                            <div class="text-4xl mb-4 text-neon-orange">⚡</div>
+                            <h3 class="card-title text-lg">Excellence</h3>
+                            <p class="text-sm text-secondary">
+                                Maintaining the highest standards in everything we do, 
+                                from service delivery to customer support.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="section" id="cta">
+            <div class="container">
+                <div class="card card-neon pulse-ring">
+                    <div class="card-body p-8 text-center">
+                        <h2 class="text-3xl mb-4 gradient-neon-text">Ready to Secure Your Digital Future?</h2>
+                        <p class="text-lg text-secondary mb-8 max-w-2xl mx-auto">
+                            Join hundreds of organizations that trust Matrica Networks to protect their 
+                            most critical assets. Let's discuss how we can enhance your security posture.
+                        </p>
+                        
+                        <div class="flex justify-center gap-4 flex-wrap">
+                            <a href="/contact.html" class="btn btn-neon btn-lg">
+                                Start Your Security Journey
+                            </a>
+                            <a href="/services.html" class="btn btn-secondary btn-lg">
+                                Explore Our Services
+                            </a>
+                        </div>
+                        
+                        <div class="mt-8 grid grid-cols-3 gap-8 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-accent">500+</div>
+                                <div class="text-sm text-muted">Clients Protected</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-accent">99.9%</div>
+                                <div class="text-sm text-muted">Uptime Guaranteed</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-accent">24/7</div>
+                                <div class="text-sm text-muted">Security Monitoring</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <div class="footer__logo">
+                        <img src="assets/images/logo.svg" alt="Matrica Networks" width="32" height="32">
+                        <span class="neon-text">Matrica Networks</span>
+                    </div>
+                    <p class="footer__description">
+                        Advanced cybersecurity solutions for the digital age. Protecting organizations from evolving cyber threats.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://twitter.com/matrica_networks" class="social-link" aria-label="Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com/company/matrica-networks" class="social-link" aria-label="LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                        <a href="https://github.com/matrica-networks" class="social-link" aria-label="GitHub">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Products</h4>
+                    <ul class="footer__links">
+                        <li><a href="products.html#shell-ide" class="footer__link">Shell IDE</a></li>
+                        <li><a href="products.html#psychy-os" class="footer__link">Psychy OS</a></li>
+                        <li><a href="products.html#sygnil" class="footer__link">Sygnil</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Services</h4>
+                    <ul class="footer__links">
+                        <li><a href="services.html#pentesting" class="footer__link">Penetration Testing</a></li>
+                        <li><a href="services.html#soc" class="footer__link">SOC Services</a></li>
+                        <li><a href="services.html#threat-hunting" class="footer__link">Threat Hunting</a></li>
+                        <li><a href="services.html#dfir" class="footer__link">DFIR</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__section">
+                    <h4 class="footer__title">Company</h4>
+                    <ul class="footer__links">
+                        <li><a href="index.html#about" class="footer__link">About Us</a></li>
+                        <li><a href="contact.html" class="footer__link">Contact</a></li>
+                        <li><a href="careers.html" class="footer__link">Careers</a></li>
+                        <li><a href="blog.html" class="footer__link">Blog</a></li>
+                        <li><a href="portal/login.html" class="footer__link">Employee Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    © 2025 Matrica Networks Pvt Ltd. All rights reserved.
+                </p>
+                <div class="footer__legal">
+                    <a href="#privacy-policy" class="footer__link">Privacy Policy</a>
+                    <a href="#terms-of-service" class="footer__link">Terms of Service</a>
+                    <a href="#security-policy" class="footer__link">Security Policy</a>
+                    <a href="#compliance" class="footer__link">Compliance</a>
+                    <a href="contact.html" class="footer__link">Emergency Hotline: +91 999 988 8777</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/webgl/shaders.js"></script>
+    <script src="assets/js/webgl/globe.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/ui.js"></script>
+    
+    <!-- Initialize WebGL Globe -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Initialize WebGL Globe
+                const globe = new MatricaGlobe('webgl-globe', {
+                    wireframe: true,
+                    particles: true,
+                    autoRotate: true,
+                    rotationSpeed: 0.3,
+                    neonColor: [0.0, 1.0, 1.0],
+                    particleColor: [0.0, 1.0, 0.5]
+                });
+                
+                // Store globe instance globally for potential interaction
+                window.matricaGlobe = globe;
+                
+                console.log('Matrica WebGL Globe initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize WebGL Globe:', error);
+            }
+            
+            // Initialize Matrix Rain Effect
+            initMatrixRain();
+        });
+        
+        // Matrix Rain Effect
+        function initMatrixRain() {
+            const container = document.getElementById('matrix-rain');
+            if (!container) return;
+            
+            const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < Math.min(columns, 20); i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = `${i * 5}%`;
+                column.style.animationDelay = `${Math.random() * 5}s`;
+                column.style.animationDuration = `${5 + Math.random() * 10}s`;
+                
+                let text = '';
+                for (let j = 0; j < 10; j++) {
+                    text += characters.charAt(Math.floor(Math.random() * characters.length)) + '<br>';
+                }
+                column.innerHTML = text;
+                
+                container.appendChild(column);
+            }
+        }
+        
+        // Scroll Effects
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

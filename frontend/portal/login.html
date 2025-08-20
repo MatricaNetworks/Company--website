@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal - Login | Matrica Networks</title>
+    <meta name="description" content="Secure employee portal login for Matrica Networks staff">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/layout.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/neon.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.png">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+</head>
+<body class="login-page">
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-rain" class="matrix-background"></canvas>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-box" data-animation="fade-in">
+            <!-- Logo and Header -->
+            <div class="login-header">
+                <div class="login-logo">
+                    <img src="../assets/images/logo.svg" alt="Matrica Networks" width="48" height="48">
+                    <h1 class="login-title">
+                        <span class="neon-text">Matrica</span> Networks
+                    </h1>
+                </div>
+                <p class="login-subtitle">Employee Portal Access</p>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <div class="security-notice__icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <span>Authorized Personnel Only</span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="login-form" novalidate>
+                <div class="form__group">
+                    <label for="username" class="form__label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form__input form__input--login" 
+                        placeholder="Enter your username"
+                        required 
+                        autocomplete="username"
+                        maxlength="50"
+                        pattern="[a-zA-Z0-9_@.-]+"
+                        title="Username can only contain letters, numbers, and special characters: _ @ . -"
+                    >
+                    <span class="form__error" id="username-error"></span>
+                </div>
+
+                <div class="form__group">
+                    <label for="password" class="form__label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <circle cx="12" cy="16" r="1"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Password
+                    </label>
+                    <div class="password-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form__input form__input--login" 
+                            placeholder="Enter your password"
+                            required 
+                            autocomplete="current-password"
+                            minlength="8"
+                            maxlength="128"
+                        >
+                        <button type="button" class="password-toggle" id="password-toggle" aria-label="Toggle password visibility">
+                            <svg class="password-icon password-icon--hide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg class="password-icon password-icon--show" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="form__error" id="password-error"></span>
+                </div>
+
+                <div class="form__group form__group--checkbox">
+                    <label class="form__checkbox">
+                        <input type="checkbox" id="remember" name="remember">
+                        <span class="form__checkmark"></span>
+                        <span class="form__checkbox-text">Keep me signed in for 7 days</span>
+                    </label>
+                </div>
+
+                <div class="form__actions">
+                    <button type="submit" class="button button--primary button--large button--full" id="login-btn">
+                        <span class="button__text">Sign In</span>
+                        <span class="button__loading" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                                <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2">
+                                    <animateTransform attributeName="transform" type="rotate" dur="1s" repeatCount="indefinite" values="0 12 12;360 12 12"/>
+                                </path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Error/Success Messages -->
+                <div class="form__message" id="form-message" style="display: none;"></div>
+            </form>
+
+            <!-- Additional Options -->
+            <div class="login-options">
+                <div class="login-links">
+                    <a href="#" class="link link--small" id="forgot-password">Forgot password?</a>
+                    <span class="separator">•</span>
+                    <a href="../contact.html" class="link link--small">Need help?</a>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="security-info">
+                <div class="security-info__item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                        <circle cx="12" cy="12" r="9"/>
+                    </svg>
+                    <span>256-bit SSL Encryption</span>
+                </div>
+                <div class="security-info__item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>Multi-Factor Authentication</span>
+                </div>
+                <div class="security-info__item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span>Activity Monitoring</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="login-footer">
+            <div class="login-footer__links">
+                <a href="../index.html" class="link link--small">← Back to Main Site</a>
+                <a href="../contact.html" class="link link--small">Contact IT Support</a>
+            </div>
+            <p class="login-footer__copyright">
+                © 2025 Matrica Networks Pvt Ltd. Unauthorized access prohibited.
+            </p>
+        </div>
+    </div>
+
+    <!-- Rate Limit Warning Modal -->
+    <div class="modal" id="rate-limit-modal" style="display: none;">
+        <div class="modal__backdrop" id="modal-backdrop"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Account Temporarily Locked</h3>
+            </div>
+            <div class="modal__body">
+                <div class="alert alert--warning">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <div>
+                        <h4>Too many failed login attempts</h4>
+                        <p>Your account has been temporarily locked for security reasons. Please wait <span id="lockout-time">5 minutes</span> before trying again, or contact IT support for immediate assistance.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal__actions">
+                <button class="button button--secondary" id="close-modal">Close</button>
+                <a href="../contact.html" class="button button--primary">Contact Support</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/auth-check.js"></script>
+    <script>
+        // Login Manager Class
+        class LoginManager {
+            constructor() {
+                this.form = document.getElementById('login-form');
+                this.csrfToken = '';
+                this.loginAttempts = 0;
+                this.maxAttempts = 5;
+                this.isLocked = false;
+                this.init();
+            }
+
+            async init() {
+                this.bindEvents();
+                this.initValidation();
+                this.checkLoginState();
+                await this.getCSRFToken();
+                this.initMatrixRain();
+                this.initPasswordStrengthIndicator();
+            }
+
+            bindEvents() {
+                // Form submission
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                // Password toggle
+                document.getElementById('password-toggle').addEventListener('click', () => {
+                    this.togglePassword();
+                });
+
+                // Real-time validation
+                document.getElementById('username').addEventListener('input', (e) => {
+                    this.validateUsername(e.target);
+                });
+
+                document.getElementById('password').addEventListener('input', (e) => {
+                    this.validatePassword(e.target);
+                });
+
+                // Forgot password
+                document.getElementById('forgot-password').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleForgotPassword();
+                });
+
+                // Modal events
+                document.getElementById('close-modal').addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                document.getElementById('modal-backdrop').addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeModal();
+                    }
+                });
+
+                // Prevent form resubmission on page refresh
+                window.addEventListener('beforeunload', () => {
+                    if (this.isSubmitting) {
+                        return 'Login in progress...';
+                    }
+                });
+
+                // Check for session timeout
+                this.checkSessionTimeout();
+            }
+
+            async getCSRFToken() {
+                try {
+                    const response = await fetch('/api/csrf-token');
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.csrfToken = data.token;
+                    }
+                } catch (error) {
+                    console.error('Failed to get CSRF token:', error);
+                    this.showMessage('Security validation failed. Please refresh the page.', 'error');
+                }
+            }
+
+            checkLoginState() {
+                // Check if user is already logged in
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionExpired = urlParams.get('session_expired');
+                const accessDenied = urlParams.get('access_denied');
+                const loggedOut = urlParams.get('logged_out');
+                
+                if (sessionExpired) {
+                    this.showMessage('Your session has expired. Please log in again.', 'warning');
+                }
+                
+                if (accessDenied) {
+                    this.showMessage('Access denied. Please log in with valid credentials.', 'error');
+                }
+                
+                if (loggedOut) {
+                    this.showMessage('You have been logged out successfully.', 'info');
+                }
+
+                // Check if user is already authenticated
+                this.checkCurrentSession();
+            }
+
+            async checkCurrentSession() {
+                try {
+                    const response = await fetch('/api/me');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.authenticated) {
+                            // Redirect to appropriate dashboard
+                            this.redirectToDashboard(data.user.role);
+                        }
+                    }
+                } catch (error) {
+                    // User not authenticated, continue with login
+                }
+            }
+
+            validateUsername(field) {
+                const value = field.value.trim();
+                const errorElement = document.getElementById('username-error');
+                
+                let isValid = true;
+                let errorMessage = '';
+
+                if (value.length === 0) {
+                    isValid = false;
+                    errorMessage = 'Username is required';
+                } else if (value.length < 2) {
+                    isValid = false;
+                    errorMessage = 'Username must be at least 2 characters';
+                } else if (value.length > 50) {
+                    isValid = false;
+                    errorMessage = 'Username must be less than 50 characters';
+                } else if (!/^[a-zA-Z0-9_@.-]+$/.test(value)) {
+                    isValid = false;
+                    errorMessage = 'Username contains invalid characters';
+                }
+
+                this.updateFieldValidation(field, errorElement, isValid, errorMessage);
+                return isValid;
+            }
+
+            validatePassword(field) {
+                const value = field.value;
+                const errorElement = document.getElementById('password-error');
+                
+                let isValid = true;
+                let errorMessage = '';
+
+                if (value.length === 0) {
+                    isValid = false;
+                    errorMessage = 'Password is required';
+                } else if (value.length < 8) {
+                    isValid = false;
+                    errorMessage = 'Password must be at least 8 characters';
+                } else if (value.length > 128) {
+                    isValid = false;
+                    errorMessage = 'Password is too long';
+                }
+
+                this.updateFieldValidation(field, errorElement, isValid, errorMessage);
+                return isValid;
+            }
+
+            updateFieldValidation(field, errorElement, isValid, errorMessage) {
+                if (isValid) {
+                    errorElement.textContent = '';
+                    field.classList.remove('form__input--error');
+                    field.classList.add('form__input--success');
+                } else {
+                    errorElement.textContent = errorMessage;
+                    field.classList.add('form__input--error');
+                    field.classList.remove('form__input--success');
+                }
+            }
+
+            initValidation() {
+                // Initialize field validation states
+                const fields = ['username', 'password'];
+                fields.forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    field.setCustomValidity('');
+                });
+            }
+
+            togglePassword() {
+                const passwordField = document.getElementById('password');
+                const hideIcon = document.querySelector('.password-icon--hide');
+                const showIcon = document.querySelector('.password-icon--show');
+                
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    hideIcon.style.display = 'none';
+                    showIcon.style.display = 'block';
+                } else {
+                    passwordField.type = 'password';
+                    hideIcon.style.display = 'block';
+                    showIcon.style.display = 'none';
+                }
+            }
+
+            async handleLogin() {
+                if (this.isLocked) {
+                    this.showRateLimitModal();
+                    return;
+                }
+
+                // Validate form
+                const usernameValid = this.validateUsername(document.getElementById('username'));
+                const passwordValid = this.validatePassword(document.getElementById('password'));
+
+                if (!usernameValid || !passwordValid) {
+                    this.showMessage('Please correct the errors above.', 'error');
+                    return;
+                }
+
+                const loginBtn = document.getElementById('login-btn');
+                const buttonText = loginBtn.querySelector('.button__text');
+                const buttonLoading = loginBtn.querySelector('.button__loading');
+
+                // Show loading state
+                this.isSubmitting = true;
+                loginBtn.disabled = true;
+                buttonText.style.display = 'none';
+                buttonLoading.style.display = 'inline-flex';
+
+                try {
+                    // Collect form data
+                    const formData = new FormData(this.form);
+                    const data = {
+                        username: formData.get('username').trim(),
+                        password: formData.get('password'),
+                        remember: formData.get('remember') === 'on',
+                        csrf_token: this.csrfToken
+                    };
+
+                    // Send login request
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify(data),
+                        credentials: 'same-origin'
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        this.showMessage('Login successful. Redirecting...', 'success');
+                        
+                        // Reset login attempts
+                        this.loginAttempts = 0;
+                        
+                        // Redirect to dashboard after short delay
+                        setTimeout(() => {
+                            this.redirectToDashboard(result.user.role);
+                        }, 1500);
+
+                    } else {
+                        // Handle login failure
+                        this.handleLoginFailure(result);
+                    }
+
+                } catch (error) {
+                    console.error('Login error:', error);
+                    this.showMessage('Connection error. Please check your network and try again.', 'error');
+                    this.loginAttempts++;
+                    this.checkRateLimit();
+                } finally {
+                    // Reset loading state
+                    this.isSubmitting = false;
+                    loginBtn.disabled = false;
+                    buttonText.style.display = 'inline';
+                    buttonLoading.style.display = 'none';
+                }
+            }
+
+            handleLoginFailure(result) {
+                this.loginAttempts++;
+                
+                let errorMessage = 'Invalid username or password';
+                
+                if (result.error === 'account_locked') {
+                    errorMessage = 'Account is locked. Contact your administrator.';
+                } else if (result.error === 'too_many_attempts') {
+                    this.isLocked = true;
+                    this.showRateLimitModal();
+                    return;
+                } else if (result.error === 'session_expired') {
+                    errorMessage = 'Session expired. Please try again.';
+                }
+
+                this.showMessage(errorMessage, 'error');
+                this.checkRateLimit();
+
+                // Clear password field on failed login
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+
+            checkRateLimit() {
+                if (this.loginAttempts >= this.maxAttempts) {
+                    this.isLocked = true;
+                    this.showRateLimitModal();
+                } else if (this.loginAttempts >= 3) {
+                    const remaining = this.maxAttempts - this.loginAttempts;
+                    this.showMessage(`Warning: ${remaining} attempt(s) remaining before account lockout.`, 'warning');
+                }
+            }
+
+            showRateLimitModal() {
+                document.getElementById('rate-limit-modal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                // Start countdown
+                let seconds = 300; // 5 minutes
+                const timeElement = document.getElementById('lockout-time');
+                
+                const countdown = setInterval(() => {
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    timeElement.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                    
+                    if (seconds <= 0) {
+                        clearInterval(countdown);
+                        this.isLocked = false;
+                        this.loginAttempts = 0;
+                        this.closeModal();
+                        this.showMessage('Account unlocked. You may try logging in again.', 'info');
+                    }
+                    seconds--;
+                }, 1000);
+            }
+
+            closeModal() {
+                document.getElementById('rate-limit-modal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+
+            redirectToDashboard(role) {
+                if (role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'employee.html';
+                }
+            }
+
+            showMessage(text, type = 'info') {
+                const messageElement = document.getElementById('form-message');
+                
+                messageElement.textContent = text;
+                messageElement.className = `form__message form__message--${type}`;
+                messageElement.style.display = 'block';
+
+                // Auto-hide success messages
+                if (type === 'success') {
+                    setTimeout(() => {
+                        messageElement.style.display = 'none';
+                    }, 3000);
+                }
+            }
+
+            handleForgotPassword() {
+                alert('Password reset functionality would be implemented here. For now, please contact your administrator or IT support.');
+            }
+
+            checkSessionTimeout() {
+                // Check for session timeout every 5 minutes
+                setInterval(async () => {
+                    try {
+                        const response = await fetch('/api/auth/check-session');
+                        if (!response.ok) {
+                            // Session expired, show warning
+                            this.showMessage('Your session will expire soon. Please save any work.', 'warning');
+                        }
+                    } catch (error) {
+                        // Network error, ignore
+                    }
+                }, 300000); // 5 minutes
+            }
+
+            initPasswordStrengthIndicator() {
+                // This would be implemented for password strength validation
+                // For login, we just do basic validation
+            }
+
+            initMatrixRain() {
+                // Simple matrix rain fallback
+                this.createMatrixRainFallback();
+            }
+
+            createMatrixRainFallback() {
+                const canvas = document.getElementById('matrix-rain');
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+                const matrixArray = matrix.split("");
+
+                const font_size = 10;
+                const columns = canvas.width / font_size;
+
+                const drops = [];
+                for (let x = 0; x < columns; x++) {
+                    drops[x] = 1;
+                }
+
+                function draw() {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = '#00ff9f';
+                    ctx.font = font_size + 'px arial';
+
+                    for (let i = 0; i < drops.length; i++) {
+                        const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                        ctx.fillText(text, i * font_size, drops[i] * font_size);
+
+                        if (drops[i] * font_size > canvas.height && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                }
+
+                setInterval(draw, 35);
+
+                // Resize handler
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                });
+            }
+        }
+
+        // Initialize login manager when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new LoginManager();
+        });
+    </script>
+</body>
+</html>
