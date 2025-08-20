@@ -301,7 +301,7 @@ Enable debug logging:
 
 ## 📝 License
 
-Copyright (c) 2024 Matrica Networks Pvt Ltd. All rights reserved.
+Copyright (c) 2025 Matrica Networks Pvt Ltd. All rights reserved.
 
 This software is proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
 
